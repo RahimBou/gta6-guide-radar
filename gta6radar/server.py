@@ -52,7 +52,12 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         path = urlparse(self.path).path
         if path == "/api/health":
-            return self.send_json(200, {"ok": True, "service": "gta6-guide-radar", "mode": "video-first"})
+            return self.send_json(200, {
+                "ok": True,
+                "service": "gta6-guide-radar",
+                "mode": "video-first",
+                "storage": "configured" if os.environ.get("GTA6_DB_PATH") or os.environ.get("GTA6_DATA_DIR") else "local_default",
+            })
         if path == "/api/map/markers":
             conn = connect()
             rows = conn.execute("""
@@ -89,9 +94,7 @@ class Handler(SimpleHTTPRequestHandler):
             conn.close()
             return self.send_json(200, result)
         if path == "/api/robot/discover":
-            if not self.authorized():
-                return self.send_json(401, {"error": "unauthorized"})
-            return self.send_json(200, {"results": discover_all()})
+            return self.send_json(405, {"error": "method_not_allowed", "message": "Utilisez POST pour lancer une collecte."})
         if path == "/api/robot/items":
             conn = connect()
             rows = conn.execute("""
@@ -122,6 +125,13 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         path = urlparse(self.path).path
+        if path == "/api/robot/discover":
+            if not self.authorized():
+                return self.send_json(401, {"error": "unauthorized"})
+            try:
+                return self.send_json(200, {"ok": True, "results": discover_all()})
+            except Exception as exc:
+                return self.send_json(500, {"error": "discovery_failed", "message": str(exc)[:240]})
         if path == "/api/robot/videos":
             try:
                 data = self.read_json()

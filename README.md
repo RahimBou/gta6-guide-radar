@@ -24,14 +24,14 @@ Le serveur utilise le port fourni par Render (`PORT`) ou `GTA6_PORT` en local.
 - `GET /api/robot/videos`
 - `GET /api/robot/tips`
 - `POST /api/robot/videos` : enregistre une URL YouTube/TikTok/Twitch et crée une tâche de contrôle des droits.
-- `POST /api/robot/discover` : lance la découverte YouTube/Twitch via API officielles (jeton administrateur requis).
+- `POST /api/robot/discover` : lance la découverte RSS, YouTube et Twitch (jeton administrateur requis). Un appel GET renvoie désormais 405 sans déclencher de collecte.
 - `POST /api/robot/tips/review` : validation éditoriale avec jeton administrateur.
 
 ## État réel
 La console web et l'enregistrement des URL sont implémentés. Les connecteurs automatiques, la transcription ASR, l'extraction d'images et l'analyse IA ne sont pas encore actifs : ils nécessitent les identifiants de plateforme, des droits d'accès au média et un fournisseur d'analyse configuré. Une URL seule n'autorise pas le téléchargement d'une vidéo.
 
 ## Configuration
-Définir `GTA6_ADMIN_TOKEN` dans les variables d'environnement pour les actions d'administration. Ne jamais enregistrer de secret dans Git.
+Définir `GTA6_ADMIN_TOKEN` dans les variables d'environnement pour les actions d'administration. Définir `GTA6_DATA_DIR` ou `GTA6_DB_PATH` uniquement après avoir configuré un stockage persistant. Ne jamais enregistrer de secret dans Git.
 
 Connecteurs à configurer ensuite :
 - YouTube Data API : `YOUTUBE_API_KEY`
@@ -44,6 +44,6 @@ Connecteurs à configurer ensuite :
 Aucun contournement de DRM, CAPTCHA, connexion ou restriction d'accès. Les captures, transcriptions et fiches conservent leur source et leur statut de preuve. Les contenus non confirmés ne sont jamais présentés comme confirmés en jeu.
 
 ## Déploiement
-Le dépôt est relié au service Render existant. Render Free utilise un système de fichiers éphémère : les données SQLite ne sont pas garanties après redémarrage. Ne pas utiliser en production réelle avant configuration d'un stockage persistant ou migration PostgreSQL.
+Le dépôt est relié au service Render existant. Render Free utilise un système de fichiers éphémère : les données SQLite ne sont pas garanties après redémarrage. Pour conserver SQLite, monter un disque persistant sur le service puis définir `GTA6_DATA_DIR` vers son point de montage (ou `GTA6_DB_PATH` vers le fichier SQLite). La simple définition de ces variables ne crée pas le disque. Sur Render Free, ne pas considérer la base comme durable. Une migration PostgreSQL reste l'option recommandée pour une exploitation multi-instance.
 
 Projet indépendant, non affilié à Rockstar Games.

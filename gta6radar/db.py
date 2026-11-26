@@ -1,13 +1,26 @@
 from pathlib import Path
+import os
 import sqlite3
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "gta6radar.sqlite3"
+# Configure GTA6_DB_PATH to an absolute file path on a persistent mounted disk.
+# GTA6_DATA_DIR is a convenient alternative directory setting. Without either,
+# the repository-local data directory is used (ephemeral on Render Free).
+_configured_db = os.environ.get("GTA6_DB_PATH", "").strip()
+_configured_dir = os.environ.get("GTA6_DATA_DIR", "").strip()
+if _configured_db:
+    DB_PATH = Path(_configured_db).expanduser()
+elif _configured_dir:
+    DB_PATH = Path(_configured_dir).expanduser() / "gta6radar.sqlite3"
+else:
+    DB_PATH = Path(__file__).resolve().parent.parent / "data" / "gta6radar.sqlite3"
 
 def connect():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA busy_timeout = 5000")
+    conn.execute("PRAGMA journal_mode = WAL")
     conn.executescript("""
     CREATE TABLE IF NOT EXISTS robot_videos (
       id TEXT PRIMARY KEY,
