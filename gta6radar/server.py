@@ -3,6 +3,7 @@ import json
 import os
 import re
 import secrets
+import sqlite3
 import uuid
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -141,5 +142,4 @@ def main():
     ThreadingHTTPServer((host, port), Handler).serve_forever()
 
 if __name__ == "__main__":
-    import sqlite3
     main()
