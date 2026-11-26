@@ -53,6 +53,31 @@ class Handler(SimpleHTTPRequestHandler):
         path = urlparse(self.path).path
         if path == "/api/health":
             return self.send_json(200, {"ok": True, "service": "gta6-guide-radar", "mode": "video-first"})
+        if path == "/api/map/markers":
+            conn = connect()
+            rows = conn.execute("""
+                SELECT id,title,description,category,status,platform,region,grid_ref,
+                       x,y,source_url,source_label,verified_at
+                FROM map_markers ORDER BY title COLLATE NOCASE
+            """).fetchall()
+            conn.close()
+            return self.send_json(200, {"items": [dict(row) for row in rows]})
+        if path == "/api/guide/entries":
+            from urllib.parse import parse_qs
+            category = parse_qs(urlparse(self.path).query).get("category", [""])[0].strip()
+            conn = connect()
+            if category:
+                rows = conn.execute("""
+                    SELECT id,slug,title,summary,body,category,platform,status,region,grid_ref
+                    FROM guide_entries WHERE category=? ORDER BY title COLLATE NOCASE
+                """, (category,)).fetchall()
+            else:
+                rows = conn.execute("""
+                    SELECT id,slug,title,summary,body,category,platform,status,region,grid_ref
+                    FROM guide_entries ORDER BY title COLLATE NOCASE
+                """).fetchall()
+            conn.close()
+            return self.send_json(200, {"items": [dict(row) for row in rows]})
         if path == "/api/robot/overview":
             conn = connect()
             result = {
