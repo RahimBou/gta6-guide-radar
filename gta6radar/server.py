@@ -105,8 +105,9 @@ class Handler(SimpleHTTPRequestHandler):
         print("%s - %s" % (self.address_string(), fmt % args))
 
 def main():
-    host = os.environ.get("GTA6_HOST", "127.0.0.1")
-    port = int(os.environ.get("GTA6_PORT", "8080"))
+    # Render fournit PORT et exige une écoute sur toutes les interfaces.
+    host = os.environ.get("GTA6_HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", os.environ.get("GTA6_PORT", "8080")))
     connect().close()
     print(f"GTA 6 Guide Radar disponible sur http://{host}:{port}")
     ThreadingHTTPServer((host, port), Handler).serve_forever()
