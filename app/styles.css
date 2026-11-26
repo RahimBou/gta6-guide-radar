@@ -25,3 +25,10 @@
 .map-marker-details button.is-on{background:var(--lime);color:#182316;border-color:var(--lime)}
 .map-attribution{font-size:8px;color:#9aa696}
 @media(max-width:760px){.map-stage{height:100%;max-width:100%}.map-marker-details{right:8px;bottom:42px}.map-import-button{padding:10px 12px}}
+
+.map-viewport{position:absolute;inset:0;overflow:hidden;display:flex;align-items:center;justify-content:center;touch-action:none}
+.map-stage{will-change:transform}
+.source-link{display:inline-block;color:var(--lime);font-size:9px;margin:6px 0;text-decoration:none}
+.saved-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;border:1px solid var(--line);border-radius:9px;background:var(--panel);margin-bottom:8px}
+.saved-row strong,.saved-row small{display:block}.saved-row strong{font-size:12px}.saved-row small{font-size:9px;color:var(--muted);margin-top:5px}
+.saved-row button{border:1px solid var(--line);border-radius:5px;background:#253026;padding:8px 10px;font-size:9px;color:var(--lime)}
