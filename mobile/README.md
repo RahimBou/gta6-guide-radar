@@ -1,36 +1,41 @@
-# GTA 6 Guide Radar — application mobile
+# GTA 6 Guide Radar — application Android et iOS
 
-Application native partagée Android/iOS, construite avec Expo SDK 58, React Native et TypeScript.
+Application mobile native construite avec Expo SDK 58, React Native et TypeScript.
 
-## Pré-requis
-- Node.js compatible avec Expo SDK 58 (Node 22.13+ recommandé).
-- npm.
-- Compte Expo pour les builds cloud.
-- Android Studio pour émulateur Android.
-- macOS + Xcode pour les builds iOS locaux ; EAS Build peut compiler iOS dans le cloud.
+## APK Android
 
-## Installation
-Depuis ce dossier :
+Chaque modification de `mobile/**` sur `main` lance automatiquement le workflow **Build Android APK**.
+
+1. Ouvrir l'onglet **Actions** du dépôt GitHub.
+2. Ouvrir le dernier workflow **Build Android APK** terminé avec succès.
+3. Dans **Artifacts**, télécharger `gta-6-guide-radar-android`.
+4. Extraire le ZIP et installer `app-release.apk` sur Android.
+
+Le workflow peut aussi être lancé manuellement depuis Actions → Build Android APK → Run workflow.
+
+## Développement local
+
+Node.js 22 et npm :
 
     npm install
-    npx expo install --fix
-    npx expo install --check
+    npx expo prebuild --platform android
     npm run typecheck
     npx expo start
 
-## Démarrage
-- Scanner le QR code avec un client Expo Go compatible, ou utiliser un development build.
-- npm run android : démarrage Android.
-- npm run ios : démarrage iOS.
-- npm run web : aperçu web.
+## Modules
 
-## État
-Cette première structure est un squelette de navigation et d'interface. Les écrans de modules, la carte native, l'API, les comptes, la synchronisation, les achats et le mode hors connexion ne sont pas encore implémentés.
+- Tableau de bord et état de connexion au robot.
+- Carte : lecture des marqueurs présents dans l'API.
+- Astuces et découvertes : lecture des fiches du robot.
+- Missions, véhicules et secrets : lecture des fiches documentées par catégorie.
+- Robot Radar : ajout de vidéos YouTube, TikTok et Twitch à la file de contrôle.
 
-## Identifiants
-Les identifiants natifs déclarés dans app.json sont provisoires et devront être vérifiés avant publication. Ne pas changer les identifiants après publication sans stratégie de migration.
+Les écrans n'inventent pas de lieux, de missions ou de secrets : ils affichent les données effectivement présentes dans la base du serveur.
 
-## Sécurité
-- Aucun secret API ou jeton administrateur dans l'application.
-- Les URL et paramètres publics peuvent être configurés par environnement.
-- Les droits d'achat doivent être vérifiés côté serveur et restaurables depuis les stores.
+## Serveur
+
+API publique : `https://gta6-guide-radar.onrender.com`.
+
+Les sources vidéo ajoutées créent une tâche de contrôle des droits. L'ajout d'une vidéo ne signifie pas que son contenu a déjà été analysé ou validé.
+
+Projet indépendant, non affilié à Rockstar Games.
