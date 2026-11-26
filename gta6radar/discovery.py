@@ -75,30 +75,35 @@ def discover_twitch():
     if not client_id or not client_secret:
         return {"platform": "twitch", "added": 0, "skipped": "TWITCH_CLIENT_ID/SECRET missing"}
     token = _twitch_token(client_id, client_secret)
-    params = urllib.parse.urlencode({"query": "GTA VI", "first": 50})
-    data = _get_json("https://api.twitch.tv/helix/videos?" + params, {
-        "Client-ID": client_id, "Authorization": "Bearer " + token
-    })
+    headers = {"Client-ID": client_id, "Authorization": "Bearer " + token}
+    params = urllib.parse.urlencode({"query": "GTA VI", "first": 25})
+    channels = _get_json("https://api.twitch.tv/helix/search/channels?" + params, headers).get("data", [])
     added = 0
     conn = connect()
     try:
-        for item in data.get("data", []):
-            video_id = str(item.get("id", ""))
-            if not video_id:
+        for channel in channels[:12]:
+            user_id = channel.get("id")
+            if not user_id:
                 continue
-            url = item.get("url") or ("https://www.twitch.tv/videos/" + video_id)
-            cur = conn.execute("""
-                INSERT OR IGNORE INTO robot_videos
-                (id,platform,url,title,creator,status,rights_status)
-                VALUES(?,?,?, ?,?,'detected','unknown')
-            """, (str(uuid.uuid4()), "twitch", url, item.get("title") or "VOD Twitch", item.get("user_name") or ""))
-            if cur.rowcount:
-                video_pk = conn.execute("SELECT id FROM robot_videos WHERE url=?", (url,)).fetchone()["id"]
-                conn.execute("""
-                    INSERT INTO robot_jobs(id,video_id,stage,status,message)
-                    VALUES(?,?,'rights_check','waiting','Métadonnées collectées via Twitch Helix. Vérifier les droits avant analyse média.')
-                """, (str(uuid.uuid4()), video_pk))
-                added += 1
+            video_params = urllib.parse.urlencode({"user_id": user_id, "first": 20, "type": "archive"})
+            videos = _get_json("https://api.twitch.tv/helix/videos?" + video_params, headers).get("data", [])
+            for item in videos:
+                video_id = str(item.get("id", ""))
+                if not video_id:
+                    continue
+                url = item.get("url") or ("https://www.twitch.tv/videos/" + video_id)
+                cur = conn.execute("""
+                    INSERT OR IGNORE INTO robot_videos
+                    (id,platform,url,title,creator,status,rights_status)
+                    VALUES(?,?,?,?,?,'detected','unknown')
+                """, (str(uuid.uuid4()), "twitch", url, item.get("title") or "VOD Twitch", item.get("user_name") or channel.get("display_name") or ""))
+                if cur.rowcount:
+                    video_pk = conn.execute("SELECT id FROM robot_videos WHERE url=?", (url,)).fetchone()["id"]
+                    conn.execute("""
+                        INSERT INTO robot_jobs(id,video_id,stage,status,message)
+                        VALUES(?,?,'rights_check','waiting','Métadonnées collectées via Twitch Helix. Vérifier les droits avant analyse média.')
+                    """, (str(uuid.uuid4()), video_pk))
+                    added += 1
         conn.commit()
     finally:
         conn.close()
