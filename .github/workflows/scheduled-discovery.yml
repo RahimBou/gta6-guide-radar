@@ -10,13 +10,16 @@ permissions:
 
 jobs:
   discover:
-    if: ${{ secrets.GTA6_ADMIN_TOKEN != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Trigger protected source discovery
         env:
           GTA6_ADMIN_TOKEN: ${{ secrets.GTA6_ADMIN_TOKEN }}
         run: |
+          if [ -z "${GTA6_ADMIN_TOKEN}" ]; then
+            echo "Secret GTA6_ADMIN_TOKEN absent : collecte ignorée."
+            exit 0
+          fi
           curl --fail --silent --show-error \
             --request POST \
             --header "Authorization: Bearer ${GTA6_ADMIN_TOKEN}" \
