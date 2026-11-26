@@ -39,7 +39,7 @@ python -m http.server 8080 --directory app
 Puis ouvrir `http://localhost:8080`.
 
 ## Incrément carte et API
-- Import local du fond cartographique dans le navigateur (JPG/PNG/WebP, 30 Mo maximum).
+- Import local du fond cartographique dans le navigateur (JPG/PNG/WebP, 60 Mo maximum).
 - Stockage local dans IndexedDB ; l'image n'est pas téléversée sur le serveur.
 - Chargement des marqueurs depuis GET /api/markers, avec repli vers app/data/markers.json.
 - Filtres fonctionnels par catégorie et statut.
