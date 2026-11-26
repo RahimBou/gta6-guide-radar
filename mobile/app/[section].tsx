@@ -1,6 +1,6 @@
 import { Link, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Linking, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const API = "https://gta6-guide-radar.onrender.com";
@@ -75,7 +75,7 @@ export default function SectionScreen() {
             const heading=row.title || row.name || "Élément sans titre";
             const sub=[row.category,row.status,row.platform,row.region,row.grid_ref].filter(Boolean).join(" · ");
             const detail=row.body || row.description || row.summary || row.message || row.url || "";
-            return <View key={String(row.id || i)} style={styles.row}><Text style={styles.rowTitle}>{heading}</Text>{sub?<Text style={styles.meta}>{sub.toUpperCase()}</Text>:null}{detail?<Text style={styles.body}>{detail}</Text>:null}{row.url?<Text style={styles.linkText} numberOfLines={2}>{row.url}</Text>:null}</View>;
+            return <View key={String(row.id || i)} style={styles.row}><Text style={styles.rowTitle}>{heading}</Text>{sub?<Text style={styles.meta}>{sub.toUpperCase()}</Text>:null}{detail?<Text style={styles.body}>{detail}</Text>:null}{row.url?<Pressable accessibilityRole="link" onPress={()=>Linking.openURL(row.url).catch(()=>Alert.alert("Lien indisponible","Impossible d’ouvrir cette adresse."))}><Text style={styles.linkText} numberOfLines={2}>OUVRIR LA SOURCE ↗</Text></Pressable>:null}</View>;
           })}</View>
         }
         <Text style={styles.footer}>LES DONNÉES SONT ACTUALISÉES DEPUIS LE SERVEUR GTA 6 GUIDE RADAR</Text>
