@@ -13,7 +13,7 @@ function showView(name){
   $(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===name));
   const crumb=$("#crumb");if(crumb)crumb.textContent=labels[name];
   window.scrollTo({top:0,behavior:"smooth"});
-  if(name==="map")refreshMap();
+  if(name==="map")renderMarkers();
   if(name==="saved")renderSaved();
 }
 // Navigation déléguée : reste fiable pour les cartes et contenus recréés dynamiquement.
