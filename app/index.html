@@ -1,139 +1,27 @@
 <!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#101411">
-  <meta name="description" content="Compagnon indépendant GTA 6 : carte, découvertes, véhicules, missions et progression.">
-  <title>Leonida — GTA 6 Guide Radar</title>
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <a class="brand" href="#" aria-label="Leonida accueil">
-        <span class="brand-mark">L<span>6</span></span>
-        <span class="brand-copy"><strong>LEONIDA</strong><small>FIELD COMPANION</small></span>
-      </a>
-      <div class="side-label">EXPLORATION</div>
-      <nav class="nav-list" aria-label="Navigation principale">
-        <button class="nav-item active" data-view="overview"><span class="nav-icon">◫</span>Vue d'ensemble</button>
-        <button class="nav-item" data-view="map"><span class="nav-icon">⌖</span>Carte interactive</button>
-        <button class="nav-item" data-view="discoveries"><span class="nav-icon">✳</span>Découvertes</button>
-        <button class="nav-item" data-view="vehicles"><span class="nav-icon">▰</span>Véhicules</button>
-        <button class="nav-item" data-view="missions"><span class="nav-icon">◈</span>Missions & activités</button>
-        <button class="nav-item" data-view="secrets"><span class="nav-icon">⌁</span>Secrets & collections</button>
-      </nav>
-      <div class="side-label second-label">MON ESPACE</div>
-      <nav class="nav-list">
-        <button class="nav-item" data-view="saved"><span class="nav-icon">♡</span>Mes favoris</button>
-        <button class="nav-item" data-view="progress"><span class="nav-icon">◴</span>Ma progression</button>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="console-card"><span class="pulse"></span><div><small>PLATEFORMES SUIVIES</small><strong>PS5 <i>•</i> XBOX SERIES X|S</strong></div></div>
-        <div class="profile-mini"><div class="avatar">G</div><div><strong>Joueur invité</strong><small>Progression locale</small></div><span class="more">···</span></div>
-      </div>
-    </aside>
-
-    <main class="main">
-      <header class="topbar">
-        <div class="mobile-brand"><span class="brand-mark">L<span>6</span></span><strong>LEONIDA</strong></div>
-        <div class="breadcrumb"><span>COMPANION</span><b>/</b><strong id="crumb">VUE D'ENSEMBLE</strong></div>
-        <div class="top-actions">
-          <label class="global-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Rechercher un lieu, un véhicule…" autocomplete="off"><kbd>⌘ K</kbd></label>
-          <button class="icon-button" id="notifications" aria-label="Notifications">♧<i></i></button>
-          <button class="upgrade-button" id="premiumButton">PASSER PREMIUM <span>↗</span></button>
-        </div>
-      </header>
-
-      <section class="view active" id="view-overview">
-        <div class="hero">
-          <div class="hero-content">
-            <div class="eyebrow"><span class="live-dot"></span> VOTRE COMPAGNON D'EXPLORATION</div>
-            <h1>WELCOME TO<br><em>LEONIDA.</em></h1>
-            <p>Tout ce qu'il faut découvrir. Un seul endroit pour tout retrouver.</p>
-            <div class="hero-buttons"><button class="primary-button" data-goto="map">EXPLORER LA CARTE <span>↗</span></button><button class="ghost-button" data-goto="discoveries">VOIR LES DÉCOUVERTES</button></div>
-          </div>
-          <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="palm palm-one">♧</div><div class="palm palm-two">♧</div><div class="coastline"></div><div class="hero-stamp">VICE<br><b>CITY</b><small>LEONIDA / USA</small></div></div>
-          <div class="hero-index">01 <span>—</span> 04</div>
-        </div>
-
-        <div class="section-heading"><div><div class="eyebrow muted">VOTRE TABLEAU DE BORD</div><h2>Reprendre l'exploration</h2></div><button class="text-link" data-goto="progress">MA PROGRESSION ↗</button></div>
-        <div class="stats-grid">
-          <article class="stat-card"><div class="stat-top"><span>COLLECTÉ</span><span class="stat-icon">✳</span></div><strong id="foundCount">0</strong><small>Découvertes enregistrées</small><div class="stat-line"><span style="width:0%" id="foundBar"></span></div></article>
-          <article class="stat-card"><div class="stat-top"><span>À EXPLORER</span><span class="stat-icon">⌖</span></div><strong>—</strong><small>Emplacements à confirmer</small><div class="stat-note">Les données arrivent après vérification</div></article>
-          <article class="stat-card"><div class="stat-top"><span>FAVORIS</span><span class="stat-icon">♡</span></div><strong id="favoriteCount">0</strong><small>Vos fiches sauvegardées</small><div class="stat-note">Synchronisation locale pour le moment</div></article>
-          <article class="stat-card"><div class="stat-top"><span>PLATEFORMES</span><span class="stat-icon">▣</span></div><strong>02</strong><small>PS5 & Xbox Series X|S</small><div class="platform-pills"><span>PS5</span><span>XBOX</span></div></article>
-        </div>
-
-        <div class="section-heading compact"><div><div class="eyebrow muted">ACCÈS RAPIDE</div><h2>Choisir une catégorie</h2></div><span class="subtle">TOUT LE GUIDE, À PORTÉE DE MAIN</span></div>
-        <div class="category-grid">
-          <button class="category-card category-map" data-goto="map"><span class="category-symbol">⌖</span><span><strong>Carte de Leonida</strong><small>Explorer les régions et lieux</small></span><b>↗</b></button>
-          <button class="category-card" data-goto="vehicles"><span class="category-symbol">▰</span><span><strong>Véhicules</strong><small>Voitures, motos, bateaux…</small></span><b>↗</b></button>
-          <button class="category-card" data-goto="discoveries"><span class="category-symbol">✳</span><span><strong>Armes & équipements</strong><small>Guides et emplacements vérifiés</small></span><b>↗</b></button>
-          <button class="category-card" data-goto="missions"><span class="category-symbol">◈</span><span><strong>Missions & activités</strong><small>Étapes, objectifs et astuces</small></span><b>↗</b></button>
-          <button class="category-card" data-goto="secrets"><span class="category-symbol">⌁</span><span><strong>Secrets & collections</strong><small>Objets rares et mystères</small></span><b>↗</b></button>
-          <button class="category-card" data-goto="saved"><span class="category-symbol">♡</span><span><strong>Mes favoris</strong><small>Retrouver vos fiches</small></span><b>↗</b></button>
-        </div>
-        <div class="notice"><span>i</span><p><strong>Projet communautaire indépendant.</strong> Les informations affichées dans cette première version sont des éléments de démonstration. Les découvertes seront publiées après contrôle des sources.</p></div>
-      </section>
-
-      <section class="view" id="view-map">
-        <div class="page-heading"><div><div class="eyebrow muted">EXPLORATION / LEONIDA</div><h1>La carte <em>interactive.</em></h1><p>Explorez les régions, filtrez les catégories et retrouvez vos marqueurs.</p></div><span class="map-status" id="mapStatus"><i></i> CARTE À CONFIGURER</span></div>
-        <div class="map-layout">
-          <aside class="map-filters">
-            <div class="filter-title">FILTRES <button id="clearFilters">EFFACER</button></div>
-            <label class="map-search">⌕ <input id="mapSearch" placeholder="Rechercher un lieu…"></label>
-            <div class="filter-group"><span>CATÉGORIES</span>
-              <label><input type="checkbox" checked data-filter="category" value="regions"> <i class="filter-dot region"></i> Régions & quartiers</label>
-              <label><input type="checkbox" checked data-filter="category" value="vehicles"> <i class="filter-dot vehicle"></i> Véhicules</label>
-              <label><input type="checkbox" checked data-filter="category" value="missions"> <i class="filter-dot mission"></i> Missions & activités</label>
-              <label><input type="checkbox" checked data-filter="category" value="collectibles"> <i class="filter-dot collectible"></i> Collections</label>
-              <label><input type="checkbox" checked data-filter="category" value="secrets"> <i class="filter-dot secret"></i> Secrets</label>
-            </div>
-            <div class="filter-group"><span>FIABILITÉ</span>
-              <label><input type="checkbox" checked data-filter="status" value="verified_in_game"> Confirmé en jeu</label>
-              <label><input type="checkbox" checked data-filter="status" value="official"> Source officielle</label>
-              <label><input type="checkbox" checked data-filter="status" value="unverified"> À vérifier</label>
-            </div>
-            <div class="map-legend"><span>STATUT DES MARQUEURS</span><p><i class="legend-dot green"></i> Confirmé en jeu</p><p><i class="legend-dot blue"></i> Source officielle</p><p><i class="legend-dot amber"></i> À vérifier</p></div>
-          </aside>
-          <div class="map-canvas">
-            <div class="map-toolbar"><span>LEONIDA <b>/</b> VUE GÉNÉRALE</span><div><button id="zoomOut">−</button><button id="zoomIn">+</button><button id="resetMap">⌖</button></div></div>
-            <div class="map-placeholder" id="mapCanvas">
-              <div class="map-viewport" id="mapViewport">
-                <div class="map-stage" id="mapStage">
-                  <img class="official-map-image" id="officialMapImage" alt="Carte officielle de Leonida importée par l'administrateur" hidden>
-                  <div class="map-grid-fallback" id="mapGridFallback"><div class="map-grid-water">LEONIDA · CARTE À IMPORTER</div><div class="grid-frame"></div><div class="grid-fallback-note">Importez le fichier image de la carte officielle Rockstar pour activer le positionnement des marqueurs.</div></div>
-                  <div class="map-markers" id="mapMarkers"></div>
-                </div>
-              </div>
-              <div class="map-empty" id="mapEmpty"><span>⌖</span><strong>Carte officielle à importer</strong><p>Téléchargez la carte sur le site Rockstar, extrayez le JPG du ZIP puis importez-le ici. Le fichier restera dans ce navigateur pour cette première version.</p><a class="text-link" href="https://www.rockstargames.com/VI/media" target="_blank" rel="noopener">TÉLÉCHARGER CHEZ ROCKSTAR ↗</a><label class="map-import-button">IMPORTER LA CARTE<input type="file" id="mapImageUpload" accept="image/jpeg,image/png,image/webp" hidden></label></div>
-              <div class="map-scale" id="mapScale">FOND CARTOGRAPHIQUE NON CHARGÉ</div><div class="map-marker-details" id="markerDetails" hidden></div>
-            </div>
-            <div class="map-bottom"><span id="markerCount">Chargement des marqueurs…</span><span id="mapAttribution">Fond cartographique : import local de la carte officielle Rockstar.</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="view" id="view-discoveries">
-        <div class="page-heading"><div><div class="eyebrow muted">BASE DE CONNAISSANCES</div><h1>Les <em>découvertes.</em></h1><p>Une bibliothèque de fiches sourcées, classées et vérifiées.</p></div><span class="count-chip">0 FICHE VALIDÉE</span></div>
-        <div class="empty-library"><div class="empty-orbit">✳</div><h2>La base se construit.</h2><p>Les découvertes issues des créateurs, forums et sources publiques seront ajoutées ici après vérification. Aucune astuce non confirmée ne sera présentée comme un fait.</p><button class="primary-button" data-goto="map">OUVRIR LA CARTE <span>↗</span></button></div>
-      </section>
-      <section class="view" id="view-vehicles"><div class="page-heading"><div><div class="eyebrow muted">GARAGE / MOBILITÉ</div><h1>Véhicules <em>& garages.</em></h1><p>Voitures, motos, bateaux, avions et emplacements à découvrir.</p></div></div><div class="empty-library"><div class="empty-orbit">▰</div><h2>Garage en préparation.</h2><p>Les véhicules et emplacements seront publiés avec leur source et leur statut de vérification.</p></div></section>
-      <section class="view" id="view-missions"><div class="page-heading"><div><div class="eyebrow muted">ACTIVITÉS / PROGRESSION</div><h1>Missions <em>& activités.</em></h1><p>Guides étape par étape, objectifs et progression personnelle.</p></div></div><div class="empty-library"><div class="empty-orbit">◈</div><h2>Le journal arrive bientôt.</h2><p>Les guides seront organisés par mission, activité et plateforme.</p></div></section>
-      <section class="view" id="view-secrets"><div class="page-heading"><div><div class="eyebrow muted">EXPLORATION / COLLECTIONS</div><h1>Secrets <em>& mystères.</em></h1><p>Objets rares, lieux cachés, animaux et découvertes communautaires.</p></div></div><div class="empty-library"><div class="empty-orbit">⌁</div><h2>Le dossier est ouvert.</h2><p>Les rumeurs resteront séparées des éléments confirmés.</p></div></section>
-      <section class="view" id="view-saved"><div class="page-heading"><div><div class="eyebrow muted">VOTRE ESPACE</div><h1>Mes <em>favoris.</em></h1><p>Vos fiches enregistrées sur cet appareil.</p></div></div><div id="savedContent"><div class="empty-library"><div class="empty-orbit">♡</div><h2>Aucun favori pour le moment.</h2><p>Enregistrez les fiches qui vous intéressent pour les retrouver ici.</p></div></div></section>
-      <section class="view" id="view-progress"><div class="page-heading"><div><div class="eyebrow muted">VOTRE ESPACE</div><h1>Ma <em>progression.</em></h1><p>Suivez votre exploration et vos objectifs.</p></div></div><div class="empty-library"><div class="empty-orbit">◴</div><h2>Votre progression commence ici.</h2><p>Le suivi sera alimenté au fur et à mesure des fiches confirmées et des marqueurs enregistrés.</p></div></section>
-
-      <footer class="footer"><span>LEONIDA FIELD COMPANION <b>·</b> VERSION 0.1</span><span>PROJET INDÉPENDANT — NON AFFILIÉ À ROCKSTAR GAMES</span></footer>
-    </main>
-  </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="./app.js"></script>
-</body>
-</html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#10101d"><title>GTA 6 Guide Radar — Video Intelligence</title>
+<style>
+:root{--bg:#0c0d18;--panel:#17192a;--panel2:#202239;--line:#34364e;--text:#f8f2ef;--muted:#a7a8bd;--pink:#ff78a8;--coral:#ff9b80;--gold:#ffc477;--cyan:#69d5dc;--purple:#b38ae8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% -10%,#3b2548 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}.side{padding:26px 18px;background:#10111f;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:25px}.brand{font-size:18px;font-weight:900;letter-spacing:.13em}.brand small{display:block;color:var(--pink);font-size:10px;letter-spacing:.2em}.side-label,.eyebrow{font-size:10px;letter-spacing:.2em;color:var(--cyan);font-weight:800}.nav{display:grid;gap:7px}.nav button{border:1px solid transparent;text-align:left;padding:12px;border-radius:12px;background:transparent;color:var(--muted)}.nav button.active,.nav button:hover{background:#28243d;border-color:#55405c;color:var(--pink)}.side-note{margin-top:auto;border:1px solid var(--line);background:var(--panel);padding:13px;border-radius:12px;color:var(--muted);font-size:12px}.main{padding:26px clamp(16px,4vw,54px) 60px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}.pill{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:11px}.pill b{color:var(--cyan)}h1{font-size:clamp(30px,5vw,54px);line-height:1.02;letter-spacing:-.05em;margin:8px 0 12px}h1 em{font-style:normal;color:var(--pink)}h2{font-size:20px;margin:0 0 12px}.sub{color:var(--muted);max-width:720px}.hero{padding:clamp(22px,4vw,42px);border:1px solid #57405b;border-radius:22px;background:linear-gradient(115deg,#24203b,#312544 55%,#17404a);position:relative;overflow:hidden}.hero:after{content:"VI";position:absolute;right:5%;top:-40px;font-size:clamp(150px,28vw,330px);font-weight:1000;color:#fff;opacity:.035;pointer-events:none}.hero>*{position:relative;z-index:1}.hero p{color:#d2cbd7;max-width:650px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:18px 0 30px}.metric,.panel,.module{border:1px solid var(--line);background:linear-gradient(145deg,var(--panel),#131525);border-radius:16px;padding:17px}.metric span{font-size:10px;color:var(--muted);letter-spacing:.14em}.metric strong{display:block;font-size:32px;margin-top:5px}.metric small{color:var(--muted)}.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:15px}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:800;background:linear-gradient(100deg,var(--pink),var(--coral),var(--gold));color:#1b1526}.btn.secondary{background:#25263d;border:1px solid var(--line);color:var(--text)}.btn:disabled{opacity:.5;cursor:not-allowed}.form{display:grid;gap:10px}.field{width:100%;background:#0e1020;border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text)}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.list{display:grid;gap:9px}.item{padding:12px;border:1px solid var(--line);border-radius:12px;background:#111426}.item strong{display:block}.item small{display:block;color:var(--muted);overflow-wrap:anywhere}.tag{display:inline-block;margin-top:7px;padding:3px 8px;border-radius:99px;background:#33263f;color:#ff9abc;font-size:10px}.empty{border:1px dashed #4a4562;border-radius:13px;padding:18px;color:var(--muted);text-align:center}.view{display:none}.view.active{display:block}.table{width:100%;border-collapse:collapse}.table td{padding:11px 7px;border-bottom:1px solid var(--line);vertical-align:top}.table td:last-child{text-align:right}.muted{color:var(--muted)}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}.step{border:1px solid var(--line);border-radius:12px;padding:13px;background:#16182a}.step b{display:block;color:var(--cyan);font-size:11px;letter-spacing:.12em}.notice{font-size:12px;color:var(--muted);margin-top:14px}.mobilebar{display:none}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.side{position:sticky;top:0;z-index:10;padding:12px 14px;border-right:0;border-bottom:1px solid var(--line);gap:10px}.brand small,.side-label,.side-note{display:none}.nav{display:flex;overflow-x:auto}.nav button{white-space:nowrap;padding:9px 12px}.main{padding:20px 14px 90px}.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.top{margin-bottom:18px}}
+@media(max-width:420px){.row{grid-template-columns:1fr}.grid{gap:8px}.metric{padding:12px}.metric strong{font-size:26px}}
+</style></head><body>
+<div class="shell"><aside class="side"><div class="brand">GTA 6 <span style="color:var(--pink)">GUIDE RADAR</span><small>VIDEO INTELLIGENCE SYSTEM</small></div><div class="side-label">CENTRE DE CONTRÔLE</div><nav class="nav"><button class="active" data-view="dashboard">◫ Tableau de bord</button><button data-view="videos">▣ Vidéos détectées</button><button data-view="tips">✳ Astuces & missions</button><button data-view="sources">◎ Sources surveillées</button><button data-view="pipeline">⌁ Pipeline IA</button></nav><div class="side-note">Projet indépendant. Les contenus ne sont publiés qu'avec leurs sources et leur statut de vérification.</div></aside>
+<main class="main"><header class="top"><div><div class="eyebrow">VICE CITY / LEONIDA / INTELLIGENCE</div><div class="muted" style="font-size:12px">Console de collecte et de transformation du gameplay</div></div><span class="pill"><b id="apiState">●</b> <span id="apiText">Connexion API…</span></span></header>
+<section class="view active" id="view-dashboard"><div class="hero"><div class="eyebrow">ROBOT ANALYSTE MULTISOURCE</div><h1>Le gameplay devient<br><em>un guide intelligent.</em></h1><p>Le robot repère les vidéos, prépare leur analyse, extrait les preuves visuelles et transforme les découvertes en astuces et solutions de missions traçables.</p><button class="btn" data-goto="videos">AJOUTER UNE VIDÉO ↗</button></div>
+<div class="grid"><article class="metric"><span>VIDÉOS ENREGISTRÉES</span><strong id="mVideos">—</strong><small>Sources multi-plateformes</small></article><article class="metric"><span>EN ATTENTE</span><strong id="mWaiting">—</strong><small>Contrôle d'accès / analyse</small></article><article class="metric"><span>ASTUCES EXTRAITES</span><strong id="mTips">—</strong><small>Propositions du robot</small></article><article class="metric"><span>PUBLIÉES</span><strong id="mPublished">—</strong><small>Après validation</small></article></div>
+<div class="layout"><article class="panel"><div class="panel-head"><h2>Chaîne d'analyse</h2><span class="tag">WORKFLOW</span></div><div class="steps"><div class="step"><b>01 / COLLECTE</b>Détection des vidéos et métadonnées</div><div class="step"><b>02 / ANALYSE</b>Transcription, captures, vision</div><div class="step"><b>03 / GUIDE</b>Astuces, missions et validation</div></div><p class="notice">L'analyse média ne démarre que lorsque l'accès et les droits sont autorisés. Une URL seule ne donne pas le droit de télécharger une vidéo.</p></article><article class="panel"><div class="panel-head"><h2>Sources ciblées</h2><span class="tag">4 FAMILLES</span></div><div class="list"><div class="item"><strong>YouTube</strong><small>Recherche et métadonnées via API officielle</small></div><div class="item"><strong>TikTok</strong><small>Comptes créateurs avec autorisation OAuth</small></div><div class="item"><strong>Twitch</strong><small>VOD et métadonnées via Helix</small></div><div class="item"><strong>Autres / import</strong><small>RSS, embeds, fichiers et URL autorisés</small></div></div></article></div></section>
+<section class="view" id="view-videos"><div class="eyebrow">INGESTION / SOURCES</div><h1>Vidéos <em>détectées.</em></h1><p class="sub">Ajoute une URL vidéo publique. Le robot l'enregistre et crée une tâche de contrôle des droits. L'analyse réelle viendra après activation des connecteurs et du moteur IA.</p><div class="layout"><article class="panel"><h2>Ajouter une vidéo</h2><form id="videoForm" class="form"><input class="field" id="videoUrl" type="url" placeholder="https://www.youtube.com/watch?v=…" required><input class="field" id="videoTitle" placeholder="Titre (facultatif si inconnu)"><input class="field" id="videoCreator" placeholder="Créateur / chaîne (facultatif)"><button class="btn" id="addVideo">ENREGISTRER LA SOURCE</button><div id="formMessage" class="notice">Plateformes reconnues : YouTube, TikTok et Twitch. Les autres liens seront acceptés lorsqu'un connecteur compatible sera ajouté.</div></form></article><article class="panel"><h2>File des vidéos</h2><div id="videoList" class="list"><div class="empty">Chargement…</div></div></article></div></section>
+<section class="view" id="view-tips"><div class="eyebrow">BASE DE CONNAISSANCES</div><h1>Astuces <em>& missions.</em></h1><p class="sub">Les fiches proposées par le robot seront présentées avec leur vidéo source, leur timecode et leurs captures. Rien n'est inventé ni publié sans validation.</p><div class="panel"><div class="panel-head"><h2>Propositions de fiches</h2><span class="tag">À CONTRÔLER</span></div><div id="tipList" class="empty">Aucune astuce extraite pour le moment. Le robot doit d'abord disposer d'un média autorisé et d'un moteur de transcription/vision configuré.</div></div></section>
+<section class="view" id="view-sources"><div class="eyebrow">CONNECTEURS</div><h1>Sources <em>surveillées.</em></h1><div class="grid"><article class="metric"><span>YOUTUBE</span><strong>API</strong><small>Clé API requise</small></article><article class="metric"><span>TIKTOK</span><strong>OAuth</strong><small>Autorisation créateur</small></article><article class="metric"><span>TWITCH</span><strong>HELIX</strong><small>Client ID + secret</small></article><article class="metric"><span>AUTRES</span><strong>RSS</strong><small>Connecteur selon disponibilité</small></article></div><div class="panel"><h2>État des connecteurs</h2><p class="muted">Aucun identifiant de plateforme n'est actuellement configuré. Cette console n'affiche donc pas de collecte automatique active. Les secrets devront être ajoutés dans les variables d'environnement Render, jamais dans le code source.</p></div></section>
+<section class="view" id="view-pipeline"><div class="eyebrow">TRAITEMENT IA</div><h1>Pipeline <em>d'analyse.</em></h1><div class="list"><div class="item"><strong>1. Découverte et dédoublonnage</strong><small>API officielle / RSS / import utilisateur</small></div><div class="item"><strong>2. Contrôle des droits</strong><small>Autorisation d'accès, de transcription et d'extraction d'images</small></div><div class="item"><strong>3. Transcription horodatée</strong><small>ASR sur fichier autorisé ou sous-titres accessibles légalement</small></div><div class="item"><strong>4. Captures automatiques</strong><small>FFmpeg sur média autorisé, extraction autour des passages pertinents</small></div><div class="item"><strong>5. Analyse visuelle</strong><small>Reconnaissance HUD, carte, objectifs, objets et étapes</small></div><div class="item"><strong>6. Rédaction de fiches</strong><small>Astuces, missions, prérequis, preuves et niveau de confiance</small></div><div class="item"><strong>7. Validation et publication</strong><small>Relecture humaine avant diffusion dans le guide</small></div></div></section>
+</main></div><script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+function view(name){$$(".view").forEach(x=>x.classList.toggle("active",x.id==="view-"+name));$$(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===name));window.scrollTo({top:0,behavior:"smooth"});}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-view],[data-goto]");if(!b)return;view(b.dataset.view||b.dataset.goto)});
+async function api(path,opts={}){const r=await fetch(path,{headers:{"Content-Type":"application/json",...(opts.headers||{})},...opts});const d=await r.json();if(!r.ok)throw new Error(d.error||"Erreur API");return d}
+async function refresh(){try{const [h,v,t]=await Promise.all([api("/api/robot/overview"),api("/api/robot/videos"),api("/api/robot/tips")]);$("#apiState").style.color="#69d5dc";$("#apiText").textContent="API connectée";$("#mVideos").textContent=h.videos;$("#mWaiting").textContent=h.waiting;$("#mTips").textContent=h.tips;$("#mPublished").textContent=h.published;$("#videoList").innerHTML=v.items.length?v.items.map(x=>'<article class="item"><strong>'+esc(x.title)+'</strong><small>'+esc(x.platform.toUpperCase())+' · '+esc(x.url)+'</small><span class="tag">'+esc(x.status)+'</span></article>').join(""):'<div class="empty">Aucune vidéo enregistrée.</div>';$("#tipList").innerHTML=t.items.length?t.items.map(x=>'<article class="item"><strong>'+esc(x.title)+'</strong><small>'+esc(x.video_title)+' · '+esc(x.video_url)+'</small><span class="tag">'+esc(x.status)+'</span></article>').join(""):'Aucune fiche proposée.';}catch(e){$("#apiState").style.color="#ff78a8";$("#apiText").textContent="API indisponible";$("#videoList").innerHTML='<div class="empty">API indisponible pour le moment.</div>';}}
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+$("#videoForm").addEventListener("submit",async e=>{e.preventDefault();const b=$("#addVideo");b.disabled=true;b.textContent="ENREGISTREMENT…";try{const d=await api("/api/robot/videos",{method:"POST",body:JSON.stringify({url:$("#videoUrl").value,title:$("#videoTitle").value,creator:$("#videoCreator").value})});$("#formMessage").textContent="Vidéo enregistrée ("+d.platform+"). Tâche créée : contrôle des droits.";$("#videoForm").reset();await refresh()}catch(err){$("#formMessage").textContent=err.message==="video_already_added"?"Cette vidéo est déjà enregistrée.":err.message}finally{b.disabled=false;b.textContent="ENREGISTRER LA SOURCE"}});
+refresh();
+</script></body></html>
