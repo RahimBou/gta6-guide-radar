@@ -53,10 +53,24 @@ Régions et quartiers, points d'intérêt, commerces, garages, véhicules, armes
 - Ne pas inventer des coordonnées : tout marqueur doit porter une source et un niveau de confiance.
 - Les ressources Rockstar restent la propriété de leurs ayants droit ; leur usage doit respecter les conditions applicables.
 
+## Carte officielle Rockstar et repérage
+Rockstar met à disposition un fichier imprimable depuis sa page média : https://www.rockstargames.com/VI/media. La carte publiée comporte une grille de colonnes numérotées 1 à 9 et de lignes A à M, utilisable comme référence lisible dans les fiches. Voir également : https://gta-6wiki.com/guides/official-leonida-map/.
+
+La première version de l'application permet d'importer localement le JPG/PNG/WebP extrait du ZIP officiel. L'image est conservée dans IndexedDB sur le navigateur de l'utilisateur ; elle n'est pas envoyée au serveur ni automatiquement partagée avec les autres utilisateurs. Pour la publication multi-utilisateur, il faudra décider d'un mode d'hébergement et vérifier les droits applicables.
+
 ## Première version cartographique (MVP)
-1. Afficher un fond de carte dont l'usage est autorisé.
-2. Charger les marqueurs depuis l'API/base de données.
-3. Ajouter recherche et filtres.
-4. Ouvrir une fiche depuis un marqueur.
-5. Enregistrer favoris et progression.
-6. Afficher le statut et les sources sur chaque fiche.
+1. Importer le fond de carte officiel depuis le navigateur.
+2. Charger les marqueurs depuis l'API SQLite ou le fichier JSON public.
+3. Positionner les marqueurs en coordonnées normalisées x/y (0–100) par rapport à l'image.
+4. Conserver la référence de grille (A1 à M9) comme repère éditorial complémentaire.
+5. Ajouter recherche, filtres par catégorie et filtres par fiabilité.
+6. Ouvrir une fiche depuis un marqueur.
+7. Enregistrer favoris et progression localement.
+8. Afficher statut, plateforme et source sur chaque fiche.
+
+## État technique de l'implémentation
+- Le schéma SQLite contient map_markers et guide_entries.
+- GET /api/markers expose les marqueurs publics ; POST /api/markers nécessite un jeton administrateur côté serveur.
+- L'interface affiche les marqueurs avec x/y et propose l'import local du fond de carte.
+- Aucun marqueur fictif n'est préchargé. Le fichier app/data/markers.json est volontairement vide jusqu'à l'import de données sourcées.
+- Les coordonnées x/y ne doivent être créées qu'après vérification de la position sur le fond cartographique choisi.
