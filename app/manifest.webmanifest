@@ -1,0 +1,12 @@
+{
+  "name": "Leonida — GTA 6 Field Companion",
+  "short_name": "Leonida",
+  "description": "Compagnon indépendant d'exploration GTA 6.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101411",
+  "theme_color": "#101411",
+  "icons": []
+}
