@@ -17,7 +17,7 @@ Puis ouvrir http://127.0.0.1:8080.
 API :
 - `GET /api/health` — état du serveur.
 - `GET /api/markers` — marqueurs cartographiques publics.
-- `GET /api/entries` — fiches publiques.
+- `GET /api/entries` — fiches publiques.\n- Back-office cartographique : http://127.0.0.1:8080/admin.html (positionnement et ajout de marqueurs).
 - `POST /api/markers` — ajout/mise à jour protégé par un jeton administrateur.
 
 Pour autoriser l'écriture, définir `GTA6_ADMIN_TOKEN` dans l'environnement du serveur. Ne jamais placer ce secret dans le code frontend. Pour exposer le serveur dans un environnement d'hébergement, configurer `GTA6_HOST=0.0.0.0`, le port fourni par l'hébergeur et un reverse proxy HTTPS.
