@@ -17,10 +17,11 @@ Puis ouvrir http://127.0.0.1:8080.
 API :
 - `GET /api/health` — état du serveur.
 - `GET /api/markers` — marqueurs cartographiques publics.
-- `GET /api/entries` — fiches publiques.\n- Back-office cartographique : http://127.0.0.1:8080/admin.html (positionnement et ajout de marqueurs).
+- `GET /api/entries` — fiches publiques.
+- Back-office cartographique : http://127.0.0.1:8080/admin.html
 - `POST /api/markers` — ajout/mise à jour protégé par un jeton administrateur.
 
-Pour autoriser l'écriture, définir `GTA6_ADMIN_TOKEN` dans l'environnement du serveur. Ne jamais placer ce secret dans le code frontend. Pour exposer le serveur dans un environnement d'hébergement, configurer `GTA6_HOST=0.0.0.0`, le port fourni par l'hébergeur et un reverse proxy HTTPS.
+Pour autoriser l'écriture, définir `GTA6_ADMIN_TOKEN` dans l'environnement du serveur. Ne jamais placer ce secret dans le code frontend. Pour exposer le serveur dans un environnement d'hébergement, configurer `GTA6_HOST=0.0.0.0`, le port fourni par l'hébergeur et un reverse proxy HTTPS. Ne pas exposer le serveur directement sur Internet sans HTTPS et sans contrôle d'accès réseau.
 
 ## Import de la carte officielle
 1. Ouvrir la page média officielle : https://www.rockstargames.com/VI/media.
@@ -51,7 +52,12 @@ python -m gta6radar collect
 python -m gta6radar list
 ```
 
-Le collecteur RSS ne garantit pas que TikTok expose ses vidéos dans des flux publics. Les liens peuvent être ajoutés manuellement avec `add-item`. Aucun contournement de connexion, CAPTCHA ou mécanisme anti-robot n'est prévu.
+Pour ajouter manuellement un lien TikTok, YouTube ou autre :
+```bash
+python -m gta6radar add-item --url "https://www.tiktok.com/@compte/video/ID" --title "Titre de la vidéo" --platform tiktok
+```
+
+Le collecteur RSS ne garantit pas que TikTok expose ses vidéos dans des flux publics. Les liens peuvent être ajoutés manuellement. Aucun contournement de connexion, CAPTCHA ou mécanisme anti-robot n'est prévu.
 
 ## Documentation
 - `docs/STRATEGIE-PRODUIT.md` — stratégie et modèle commercial.
