@@ -83,43 +83,39 @@
       </section>
 
       <section class="view" id="view-map">
-        <div class="page-heading"><div><div class="eyebrow muted">EXPLORATION / LEONIDA</div><h1>La carte <em>interactive.</em></h1><p>Explorez les régions, filtrez les catégories et retrouvez vos marqueurs.</p></div><span class="map-status"><i></i> CARTE EN PRÉPARATION</span></div>
+        <div class="page-heading"><div><div class="eyebrow muted">EXPLORATION / LEONIDA</div><h1>La carte <em>interactive.</em></h1><p>Explorez les régions, filtrez les catégories et retrouvez vos marqueurs.</p></div><span class="map-status" id="mapStatus"><i></i> CARTE À CONFIGURER</span></div>
         <div class="map-layout">
           <aside class="map-filters">
             <div class="filter-title">FILTRES <button id="clearFilters">EFFACER</button></div>
             <label class="map-search">⌕ <input id="mapSearch" placeholder="Rechercher un lieu…"></label>
             <div class="filter-group"><span>CATÉGORIES</span>
-              <label><input type="checkbox" checked value="regions"> <i class="filter-dot region"></i> Régions & quartiers</label>
-              <label><input type="checkbox" checked value="vehicles"> <i class="filter-dot vehicle"></i> Véhicules</label>
-              <label><input type="checkbox" checked value="missions"> <i class="filter-dot mission"></i> Missions & activités</label>
-              <label><input type="checkbox" checked value="collectibles"> <i class="filter-dot collectible"></i> Collections</label>
-              <label><input type="checkbox" checked value="secrets"> <i class="filter-dot secret"></i> Secrets</label>
+              <label><input type="checkbox" checked data-filter="category" value="regions"> <i class="filter-dot region"></i> Régions & quartiers</label>
+              <label><input type="checkbox" checked data-filter="category" value="vehicles"> <i class="filter-dot vehicle"></i> Véhicules</label>
+              <label><input type="checkbox" checked data-filter="category" value="missions"> <i class="filter-dot mission"></i> Missions & activités</label>
+              <label><input type="checkbox" checked data-filter="category" value="collectibles"> <i class="filter-dot collectible"></i> Collections</label>
+              <label><input type="checkbox" checked data-filter="category" value="secrets"> <i class="filter-dot secret"></i> Secrets</label>
             </div>
             <div class="filter-group"><span>FIABILITÉ</span>
-              <label><input type="checkbox" checked value="verified"> Confirmé en jeu</label>
-              <label><input type="checkbox" checked value="official"> Source officielle</label>
-              <label><input type="checkbox" checked value="unverified"> À vérifier</label>
+              <label><input type="checkbox" checked data-filter="status" value="verified_in_game"> Confirmé en jeu</label>
+              <label><input type="checkbox" checked data-filter="status" value="official"> Source officielle</label>
+              <label><input type="checkbox" checked data-filter="status" value="unverified"> À vérifier</label>
             </div>
             <div class="map-legend"><span>STATUT DES MARQUEURS</span><p><i class="legend-dot green"></i> Confirmé en jeu</p><p><i class="legend-dot blue"></i> Source officielle</p><p><i class="legend-dot amber"></i> À vérifier</p></div>
           </aside>
           <div class="map-canvas">
             <div class="map-toolbar"><span>LEONIDA <b>/</b> VUE GÉNÉRALE</span><div><button id="zoomOut">−</button><button id="zoomIn">+</button><button id="resetMap">⌖</button></div></div>
             <div class="map-placeholder" id="mapCanvas">
-              <div class="map-water-label water-one">GULF OF MEXICO</div><div class="map-water-label water-two">ATLANTIC OCEAN</div>
-              <svg class="map-art" viewBox="0 0 900 600" role="img" aria-label="Schéma provisoire de la carte de Leonida, non géographique">
-                <defs><pattern id="terrain" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M0 18 Q9 8 18 18 T36 18" fill="none" stroke="#647b60" stroke-opacity=".12" stroke-width="1"/></pattern></defs>
-                <path class="land" d="M214 45 C280 22 366 44 425 65 C486 86 535 62 604 86 C674 110 700 161 735 205 C767 245 750 289 782 334 C802 364 769 421 727 442 C687 462 683 509 630 530 C576 551 534 525 493 548 C440 575 395 538 355 515 C313 491 264 505 228 468 C190 429 168 397 177 351 C187 304 142 268 159 218 C174 173 158 95 214 45 Z"/>
-                <path class="terrain" d="M214 45 C280 22 366 44 425 65 C486 86 535 62 604 86 C674 110 700 161 735 205 C767 245 750 289 782 334 C802 364 769 421 727 442 C687 462 683 509 630 530 C576 551 534 525 493 548 C440 575 395 538 355 515 C313 491 264 505 228 468 C190 429 168 397 177 351 C187 304 142 268 159 218 C174 173 158 95 214 45 Z"/>
-                <path class="road" d="M228 140 C330 180 365 145 460 190 S620 245 720 220 M185 315 C300 275 365 320 450 285 S620 345 760 370 M270 460 C330 390 420 410 485 455 S600 470 690 425"/>
-                <path class="road thin" d="M330 75 C340 170 300 220 355 310 S390 430 430 525 M560 90 C535 190 590 250 555 340 S570 460 620 515"/>
-                <path class="river" d="M280 65 C320 125 275 175 325 225 S355 330 420 350 S465 450 520 520"/>
-                <text x="455" y="235" class="map-city">VICE CITY</text><text x="455" y="255" class="map-region">SOUTH LEONIDA</text>
-                <text x="265" y="380" class="map-region">GRASSRIVERS</text><text x="585" y="390" class="map-region">THE KEYS</text><text x="320" y="120" class="map-region">AMBER ROCK</text>
-              </svg>
-              <div class="map-empty"><span>⌖</span><strong>La carte détaillée arrive bientôt</strong><p>Ce schéma est une maquette d'interface, pas la géographie officielle du jeu. Le fond autorisé et les coordonnées validées seront intégrés ici.</p><button class="ghost-button" data-goto="discoveries">CONSULTER LES SOURCES</button></div>
-              <div class="map-scale">APERÇU SCHÉMATIQUE · NON GÉOGRAPHIQUE</div>
+              <div class="map-viewport" id="mapViewport">
+                <div class="map-stage" id="mapStage">
+                  <img class="official-map-image" id="officialMapImage" alt="Carte officielle de Leonida importée par l'administrateur" hidden>
+                  <div class="map-grid-fallback" id="mapGridFallback"><div class="map-grid-water">LEONIDA · CARTE À IMPORTER</div><div class="grid-frame"></div><div class="grid-fallback-note">Importez le fichier image de la carte officielle Rockstar pour activer le positionnement des marqueurs.</div></div>
+                  <div class="map-markers" id="mapMarkers"></div>
+                </div>
+              </div>
+              <div class="map-empty" id="mapEmpty"><span>⌖</span><strong>Carte officielle à importer</strong><p>Téléchargez la carte sur le site Rockstar, extrayez le JPG du ZIP puis importez-le ici. Le fichier restera dans ce navigateur pour cette première version.</p><a class="text-link" href="https://www.rockstargames.com/VI/media" target="_blank" rel="noopener">TÉLÉCHARGER CHEZ ROCKSTAR ↗</a><label class="map-import-button">IMPORTER LA CARTE<input type="file" id="mapImageUpload" accept="image/jpeg,image/png,image/webp" hidden></label></div>
+              <div class="map-scale" id="mapScale">FOND CARTOGRAPHIQUE NON CHARGÉ</div>
             </div>
-            <div class="map-bottom"><span id="markerCount">0 marqueur affiché</span><span>Les positions non vérifiées restent masquées de la carte publique.</span></div>
+            <div class="map-bottom"><span id="markerCount">Chargement des marqueurs…</span><span id="mapAttribution">Fond cartographique : import local de la carte officielle Rockstar.</span></div>
           </div>
         </div>
       </section>
