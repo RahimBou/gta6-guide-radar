@@ -1,7 +1,8 @@
 from pathlib import Path
 import sqlite3
 
-DB_PATH = Path("data/gta6radar.sqlite3")
+# Keep the database anchored to the repository, not the shell's current directory.
+DB_PATH = Path(__file__).resolve().parent.parent / "data" / "gta6radar.sqlite3"
 
 def connect():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
