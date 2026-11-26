@@ -37,3 +37,32 @@
 
 .admin-body{background:#101411}.admin-wrap{max-width:1280px;margin:0 auto;padding:35px 28px}.admin-head{padding:15px 0 25px}.admin-head .eyebrow{margin-top:20px}.admin-head h1{font:700 clamp(34px,5vw,55px)/1 "Space Grotesk";letter-spacing:-2px;margin:13px 0}.admin-head h1 em{font-style:normal;color:var(--lime)}.admin-head p{color:#9aa697;font-size:12px;max-width:620px;line-height:1.6}.admin-token,.admin-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:14px}.admin-token{display:flex;align-items:end;gap:18px}.admin-token label,.admin-panel label{display:grid;gap:7px;color:#aab6a8;font-size:9px;font-weight:700;letter-spacing:.8px;flex:1}.admin-token input,.admin-panel input,.admin-panel select,.admin-panel textarea{width:100%;background:#101612;border:1px solid #354238;border-radius:6px;padding:11px;color:#eef2e9;outline:none;font:11px "DM Sans"}.admin-token small{color:#7e8c80;font-size:9px}.admin-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.admin-panel h2{font:600 16px "Space Grotesk";margin:0 0 8px}.admin-panel>p{font-size:10px;line-height:1.5;color:#98a597}.admin-map-wrap{margin-top:15px;background:#101612;border:1px solid var(--line);border-radius:8px;overflow:hidden}.admin-map{position:relative;min-height:0;display:block;background:linear-gradient(150deg,#d7d2b6,#9ba88d);cursor:crosshair}.admin-map img{display:block;width:100%;max-width:100%;height:auto;max-height:none;object-fit:contain}.admin-map #adminMapHint{position:absolute;inset:0;display:grid;place-items:center;margin:auto}.admin-map img[hidden]{display:none}.admin-map #adminMapHint{max-width:260px;text-align:center;color:#33422e;font-size:11px;line-height:1.6;padding:18px}.admin-pin{position:absolute;width:20px;height:20px;border:3px solid white;border-radius:50%;background:#d76b42;transform:translate(-50%,-50%);box-shadow:0 2px 9px #0009;pointer-events:none}.coord-display{display:flex;justify-content:space-between;padding:12px 0 16px;color:#8b998b;font-size:8px;letter-spacing:1px}.coord-display strong{color:var(--lime);font:600 11px "Space Grotesk"}.admin-panel form{display:grid;gap:12px}.admin-panel form .primary-button{justify-self:start;margin-top:5px}.admin-feedback{font-size:10px;color:#d8b67c;margin:0}.admin-feedback.success{color:var(--lime)}.admin-list{margin-top:14px}.admin-marker-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:12px 0}.admin-marker-row strong,.admin-marker-row small{display:block}.admin-marker-row strong{font-size:11px}.admin-marker-row small,.admin-marker-row>span{font-size:9px;color:#8d9b8e;margin-top:4px}.admin-marker-row>span{white-space:nowrap}.admin-list #markerList{font-size:10px;color:#a0ad9f}.admin-wrap .footer{margin-top:24px}
 @media(max-width:760px){.admin-wrap{padding:22px 14px 90px}.admin-token{display:block}.admin-token small{display:block;margin-top:10px}.admin-grid{grid-template-columns:1fr}.admin-map{min-height:380px}.admin-panel{padding:15px}}
+
+
+/* GTA VI-inspired Vice City palette: sunset coral, neon pink, ocean teal and warm gold */
+:root{
+  --bg:#090d18;--panel:#111a2a;--line:#29354b;--text:#f8f2ed;--muted:#a8b5c8;
+  --lime:#ff75a8;--green:#62d6c7;--blue:#62c9ed;--amber:#ffc46b;
+}
+body{background:#090d18;color:#f8f2ed}
+.sidebar{background:#0c1321;border-color:#29354b}
+.brand-mark{background:linear-gradient(145deg,#ff75a8,#ff9b75);color:#101525}
+.brand-mark span{color:#101525}
+.nav-item.active{background:#25213a;color:#ff8fba}
+.nav-item:hover,.category-card:hover,.card:hover{border-color:#ff75a8}
+.hero{background:linear-gradient(115deg,#171d35 0%,#202343 48%,#183d4a 100%);border-color:#59405b}
+.hero h1 em,.page-heading h1 em,.admin-head h1 em{color:#ff82ad}
+.hero-art .sun{background:linear-gradient(180deg,#ffb66f 0%,#ff7e9e 48%,#a85ac5 100%);box-shadow:0 0 70px #ff7e9e55}
+.primary-button,.map-import-button{background:linear-gradient(100deg,#ff75a8,#ff9b75);color:#171323}
+.ghost-button{border-color:#547c89;color:#9ce8df}
+.category-card,.stat-card,.map-filters,.map-canvas,.empty-library{background-color:#111a2a;border-color:#29354b}
+.category-symbol,.stat-icon,.text-link,.map-toolbar b,.map-empty>span{color:#ff82ad}
+.map-placeholder{background:radial-gradient(ellipse at 50% 50%,#244553,#151d35 70%,#0e1727)}
+.map-grid-fallback{background:linear-gradient(145deg,#c6a8a2,#8cb8b3 55%,#d8c6a7);color:#28364a}
+.map-pin.verified{background:#62d6c7}.map-pin.official{background:#62c9ed}
+.toast{background:#ff8caf;color:#171323}
+@media(max-width:760px){
+  .sidebar{overflow-x:auto;overflow-y:hidden}
+  .sidebar .nav-list{min-width:100%;overflow-x:auto;scrollbar-width:none}
+  .sidebar .nav-list::-webkit-scrollbar{display:none}
+}
