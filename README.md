@@ -24,6 +24,7 @@ Le serveur utilise le port fourni par Render (`PORT`) ou `GTA6_PORT` en local.
 - `GET /api/robot/videos`
 - `GET /api/robot/tips`
 - `POST /api/robot/videos` : enregistre une URL YouTube/TikTok/Twitch et crée une tâche de contrôle des droits.
+- `POST /api/robot/discover` : lance la découverte YouTube/Twitch via API officielles (jeton administrateur requis).
 - `POST /api/robot/tips/review` : validation éditoriale avec jeton administrateur.
 
 ## État réel
