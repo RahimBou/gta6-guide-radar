@@ -1,27 +1,42 @@
-const views = ["overview","map","discoveries","vehicles","missions","secrets","saved","progress"];
-const labels = {overview:"VUE D'ENSEMBLE",map:"CARTE INTERACTIVE",discoveries:"DÉCOUVERTES",vehicles:"VÉHICULES",missions:"MISSIONS & ACTIVITÉS",secrets:"SECRETS & COLLECTIONS",saved:"MES FAVORIS",progress:"MA PROGRESSION"};
-const $ = (s, root=document) => root.querySelector(s);
-const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-let favorites = new Set(JSON.parse(localStorage.getItem("gta6-favorites") || "[]"));
-let found = new Set(JSON.parse(localStorage.getItem("gta6-found") || "[]"));
-function toast(message){const el=$("#toast");el.textContent=message;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2300)}
-function showView(name){if(!views.includes(name))return;$$(".view").forEach(v=>v.classList.toggle("active",v.id===`view-${name}`));$$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===name));$("#crumb").textContent=labels[name];window.scrollTo({top:0,behavior:"smooth"});if(name==="map")refreshMap()}
+const views=["overview","map","discoveries","vehicles","missions","secrets","saved","progress"];
+const labels={overview:"VUE D'ENSEMBLE",map:"CARTE INTERACTIVE",discoveries:"DÉCOUVERTES",vehicles:"VÉHICULES",missions:"MISSIONS & ACTIVITÉS",secrets:"SECRETS & COLLECTIONS",saved:"MES FAVORIS",progress:"MA PROGRESSION"};
+const $=(s,root=document)=>root.querySelector(s), $$=(s,root=document)=>[...root.querySelectorAll(s)];
+const STORE_KEYS={favorites:"gta6-favorites",found:"gta6-found",mapImage:"leonida-map-image"};
+let favorites=new Set(readSet(STORE_KEYS.favorites)),found=new Set(readSet(STORE_KEYS.found)),markers=[];
+function readSet(key){try{return JSON.parse(localStorage.getItem(key)||"[]")}catch{return[]}}
+function saveSet(key,set){localStorage.setItem(key,JSON.stringify([...set]))}
+function toast(message){const el=$("#toast");el.textContent=message;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2400)}
+function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;',"'":"&#39;"}[c]))}
+function showView(name){if(!views.includes(name))return;$$(".view").forEach(v=>v.classList.toggle("active",v.id===`view-${name}`));$$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===name));$("#crumb").textContent=labels[name];window.scrollTo({top:0,behavior:"smooth"});if(name==="map")refreshMap();if(name==="saved")renderSaved()}
 $$(".nav-item").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
 $$("[data-goto]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.goto)));
-function refreshStats(){$("#foundCount").textContent=found.size;$("#favoriteCount").textContent=favorites.size;$("#foundBar").style.width=Math.min(found.size/20*100,100)+"%"}
-refreshStats();
+function refreshStats(){$("#foundCount").textContent=found.size;$("#favoriteCount").textContent=favorites.size;$("#foundBar").style.width=Math.min(found.size/Math.max(markers.length,20)*100,100)+"%"}
+function statusLabel(status){return({verified_in_game:"CONFIRMÉ EN JEU",official:"SOURCE OFFICIELLE",corroborated:"CORROBORÉ",unverified:"À VÉRIFIER",to_check:"À CONTRÔLER"})[status]||"À VÉRIFIER"}
+function selectedFilters(kind){return $$(`.filter-group input[data-filter="${kind}"]:checked`).map(el=>el.value)}
+function visibleMarkers(){const cats=selectedFilters("category"),statuses=selectedFilters("status"),q=$("#mapSearch").value.trim().toLocaleLowerCase();return markers.filter(m=>(!cats.length||cats.includes(m.category))&&(!statuses.length||statuses.includes(m.status))&&(!q||[m.title,m.region,m.grid_ref,m.description].join(" ").toLocaleLowerCase().includes(q)))}
+function renderMarkers(){const layer=$("#mapMarkers");if(!layer)return;layer.innerHTML="";const list=visibleMarkers();for(const marker of list){const pin=document.createElement("button");pin.className="map-pin "+(marker.status==="verified_in_game"?"verified":marker.status==="official"?"official":"");pin.style.left=marker.x+"%";pin.style.top=marker.y+"%";pin.type="button";pin.title=marker.title;pin.setAttribute("aria-label",marker.title);pin.addEventListener("click",()=>showMarker(marker));layer.append(pin)}$("#markerCount").textContent=`${list.length} marqueur${list.length>1?"s":""} affiché${list.length>1?"s":""} / ${markers.length}`;$("#mapStatus").innerHTML="<i></i> "+(markers.length?"MARQUEURS CHARGÉS":"EN ATTENTE DE DONNÉES");}
+function showMarker(m){const panel=$("#markerDetails");panel.hidden=false;panel.innerHTML=`<div class="detail-meta">${escapeHTML(statusLabel(m.status))} · ${escapeHTML(m.platform||"PS5 / XBOX")}</div><strong>${escapeHTML(m.title)}</strong><p>${escapeHTML(m.description||"Aucune description renseignée.")}</p><p>${escapeHTML([m.region,m.grid_ref].filter(Boolean).join(" · ")||"Localisation à préciser")}</p><button id="toggleFavorite" class="${favorites.has(m.id)?"is-on":""}">${favorites.has(m.id)?"♥ Favori":"♡ Ajouter aux favoris"}</button><button id="toggleFound" class="${found.has(m.id)?"is-on":""}">${found.has(m.id)?"✓ Trouvé":"Marquer trouvé"}</button>${m.source_url?`<a class="source-link" href="${escapeHTML(m.source_url)}" target="_blank" rel="noopener">Source ↗</a>`:""}`;
+$("#toggleFavorite").addEventListener("click",()=>{favorites.has(m.id)?favorites.delete(m.id):favorites.add(m.id);saveSet(STORE_KEYS.favorites,favorites);showMarker(m);refreshStats()});$("#toggleFound").addEventListener("click",()=>{found.has(m.id)?found.delete(m.id):found.add(m.id);saveSet(STORE_KEYS.found,found);showMarker(m);refreshStats()})}
+function renderSaved(){const box=$("#savedContent");if(!box)return;const saved=markers.filter(m=>favorites.has(m.id));box.innerHTML=saved.length?saved.map(m=>`<article class="saved-row"><div><strong>${escapeHTML(m.title)}</strong><small>${escapeHTML(m.region||m.category)} · ${escapeHTML(statusLabel(m.status))}</small></div><button data-marker="${escapeHTML(m.id)}">Voir sur la carte ↗</button></article>`).join(""):`<div class="empty-library"><div class="empty-orbit">♡</div><h2>Aucun favori pour le moment.</h2><p>Les marqueurs ajoutés aux favoris apparaîtront ici.</p><button class="primary-button" data-goto="map">OUVRIR LA CARTE ↗</button></div>`;$$("[data-marker]",box).forEach(b=>b.addEventListener("click",()=>{showView("map");const m=markers.find(x=>x.id===b.dataset.marker);if(m)showMarker(m)}));$$("[data-goto]",box).forEach(b=>b.addEventListener("click",()=>showView(b.dataset.goto)))}
+async function loadMarkers(){try{const response=await fetch("/api/markers",{headers:{Accept:"application/json"}});if(!response.ok)throw new Error("API indisponible");const data=await response.json();markers=Array.isArray(data.items)?data.items:[]}catch{try{const response=await fetch("./data/markers.json");const data=await response.json();markers=Array.isArray(data.items)?data.items:[]}catch{markers=[]}}renderMarkers();refreshStats()}
+async function openMapImage(){try{const saved=await getStoredImage();if(saved){$("#officialMapImage").src=saved;$("#officialMapImage").hidden=false;$("#mapGridFallback").hidden=true;$("#mapEmpty").hidden=true;$("#mapScale").textContent="CARTE OFFICIELLE IMPORTÉE LOCALEMENT";return}}catch{}}
+function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open("leonida-local",1);req.onupgradeneeded=()=>req.result.createObjectStore("assets");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+async function storeImage(value){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction("assets","readwrite");tx.objectStore("assets").put(value,STORE_KEYS.mapImage);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+async function getStoredImage(){const db=await openDB();return new Promise((resolve,reject)=>{const req=db.transaction("assets").objectStore("assets").get(STORE_KEYS.mapImage);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error)})}
+$("#mapImageUpload").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;if(!/^image\/(jpeg|png|webp)$/.test(file.type)){toast("Format accepté : JPG, PNG ou WebP.");return}if(file.size>30*1024*1024){toast("La carte doit faire moins de 30 Mo.");return}const reader=new FileReader();reader.onload=async()=>{try{await storeImage(reader.result);await openMapImage();toast("Carte importée sur cet appareil.")}catch{toast("Import impossible : stockage du navigateur insuffisant.")}};reader.readAsDataURL(file)});
 $("#premiumButton").addEventListener("click",()=>toast("Les offres premium seront activées après le lancement."));
 $("#notifications").addEventListener("click",()=>toast("Aucune nouvelle alerte pour le moment."));
-$("#globalSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){showView("discoveries");toast("La recherche sera reliée à la base de découvertes.")}});
-document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#globalSearch").focus()}});
-const mapFilters=$$(".filter-group input");
-function refreshMap(){const selected=mapFilters.filter(x=>x.checked).length;$("#markerCount").textContent=selected?"0 marqueur affiché · base en préparation":"Filtres masqués"}
-mapFilters.forEach(x=>x.addEventListener("change",refreshMap));
-$("#clearFilters").addEventListener("click",()=>{mapFilters.forEach(x=>x.checked=false);refreshMap()});
-$("#mapSearch").addEventListener("input",()=>{});
-let zoom=1;
-function setZoom(next){zoom=Math.max(.8,Math.min(1.5,next));$(".map-art").style.transform=`scale(${zoom})`}
-$("#zoomIn").addEventListener("click",()=>setZoom(zoom+.1));
-$("#zoomOut").addEventListener("click",()=>setZoom(zoom-.1));
-$("#resetMap").addEventListener("click",()=>setZoom(1));
-if("serviceWorker" in navigator && location.protocol.startsWith("http")){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}
+$("#globalSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){showView("map");$("#mapSearch").value=e.target.value;renderMarkers()}});
+document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#globalSearch").focus()}if(e.key==="Escape")$("#markerDetails").hidden=true});
+const mapFilters=$$(".filter-group input");mapFilters.forEach(x=>x.addEventListener("change",renderMarkers));
+$("#clearFilters").addEventListener("click",()=>{mapFilters.forEach(x=>x.checked=false);renderMarkers()});
+$("#mapSearch").addEventListener("input",renderMarkers);
+let zoom=1,panX=0,panY=0,drag=null;
+function setMapTransform(){const stage=$("#mapStage");stage.style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`}
+function setZoom(next){zoom=Math.max(1,Math.min(4,next));setMapTransform()}
+$("#zoomIn").addEventListener("click",()=>setZoom(zoom+.25));$("#zoomOut").addEventListener("click",()=>setZoom(zoom-.25));$("#resetMap").addEventListener("click",()=>{zoom=1;panX=0;panY=0;setMapTransform();$("#markerDetails").hidden=true});
+$("#mapViewport").addEventListener("pointerdown",e=>{if(e.target.closest(".map-pin"))return;drag={x:e.clientX-panX,y:e.clientY-panY};e.currentTarget.setPointerCapture(e.pointerId)});
+$("#mapViewport").addEventListener("pointermove",e=>{if(!drag)return;panX=e.clientX-drag.x;panY=e.clientY-drag.y;setMapTransform()});
+$("#mapViewport").addEventListener("pointerup",()=>drag=null);$("#mapViewport").addEventListener("pointercancel",()=>drag=null);
+loadMarkers();openMapImage();refreshStats();
+if("serviceWorker" in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
