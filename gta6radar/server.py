@@ -92,6 +92,14 @@ class Handler(SimpleHTTPRequestHandler):
             if not self.authorized():
                 return self.send_json(401, {"error": "unauthorized"})
             return self.send_json(200, {"results": discover_all()})
+        if path == "/api/robot/items":
+            conn = connect()
+            rows = conn.execute("""
+                SELECT id,platform,url,title,summary,category,status,published_at,collected_at
+                FROM items ORDER BY COALESCE(published_at,collected_at) DESC LIMIT 200
+            """).fetchall()
+            conn.close()
+            return self.send_json(200, {"items": [dict(row) for row in rows]})
         if path == "/api/robot/videos":
             conn = connect()
             rows = conn.execute("""
