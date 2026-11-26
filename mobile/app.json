@@ -3,8 +3,8 @@
     "name": "GTA 6 Guide Radar",
     "slug": "gta6-guide-radar",
     "scheme": "gta6radar",
-    "version": "0.1.0",
-    "orientation": "default",
+    "version": "1.0.0",
+    "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
@@ -13,7 +13,12 @@
     },
     "android": {
       "package": "com.rahimbou.gta6guideradar",
-      "edgeToEdgeEnabled": true
+      "versionCode": 1,
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ]
     },
     "plugins": ["expo-router"],
     "experiments": { "typedRoutes": true }
