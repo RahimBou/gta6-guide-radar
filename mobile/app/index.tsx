@@ -12,6 +12,7 @@ const sections = [
   { title: "Secrets & collections", detail: "Centraliser les éléments à découvrir.", href: "/secrets", symbol: "⌁" },
   { title: "Ma progression", detail: "Retrouver votre suivi personnel.", href: "/progress", symbol: "◴" },
   { title: "Robot Radar", detail: "Sources vidéo, analyse et fiches proposées.", href: "/robot", symbol: "◎" },
+  { title: "Sources & actualités", detail: "Articles publics, guides et nouveautés collectés.", href: "/sources", symbol: "▤" },
 ] as const;
 
 export default function HomeScreen() {
