@@ -29,11 +29,11 @@ export default function ModulePlaceholderScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#101411" },
+  safe: { flex: 1, backgroundColor: "#0a1020" },
   content: { flex: 1, justifyContent: "center", padding: 28, maxWidth: 720, width: "100%", alignSelf: "center" },
-  kicker: { color: "#c5ed73", fontSize: 10, fontWeight: "800", letterSpacing: 2 },
-  title: { color: "#f1f3ec", fontSize: 32, fontWeight: "900", marginTop: 12 },
-  body: { color: "#b7c1b5", fontSize: 15, lineHeight: 23, marginTop: 18 },
-  note: { color: "#89968a", fontSize: 12, marginTop: 14 },
-  back: { color: "#c5ed73", fontWeight: "800", marginTop: 28 }
+  kicker: { color: "#ff82ad", fontSize: 10, fontWeight: "800", letterSpacing: 2 },
+  title: { color: "#fff4ef", fontSize: 32, fontWeight: "900", marginTop: 12 },
+  body: { color: "#c2c9d8", fontSize: 15, lineHeight: 23, marginTop: 18 },
+  note: { color: "#9aa8bd", fontSize: 12, marginTop: 14 },
+  back: { color: "#ff82ad", fontWeight: "800", marginTop: 28 }
 });
