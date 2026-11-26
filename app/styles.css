@@ -74,3 +74,48 @@ body{background:#090d18;color:#f8f2ed}
   .sidebar .nav-item:nth-child(n+5){display:flex!important}
   .sidebar .second-label+.nav-list{display:flex!important}
 }
+
+/* VICE CITY / GTA VI — palette appliquée à la vraie interface web */
+:root{
+ --bg:#0b1020;--panel:#151b31;--line:#343a59;--text:#fff4ef;--muted:#b8bfd0;
+ --lime:#ff78a8;--green:#5ed8cc;--blue:#65c8ef;--amber:#ffbd70;
+}
+html,body{background:#0b1020;color:#fff4ef}
+.sidebar{background:#0c1325;border-color:#343a59}
+.brand-mark{background:linear-gradient(145deg,#ff78a8,#ffad78);color:#11172b}
+.brand-mark span{color:#11172b}
+.nav-item{color:#b8bfd0}
+.nav-item.active{background:#282441;color:#ff91b7;border-left-color:#ff78a8}
+.nav-item:hover{background:#24243d;color:#fff4ef}
+.topbar{background:#0b1020;border-color:#343a59}
+.global-search,.icon-button{background:#151b31;border-color:#343a59;color:#dce2ed}
+.upgrade-button,.primary-button{background:linear-gradient(105deg,#ff78a8,#ff9a83 55%,#ffc078);color:#17152b}
+.hero{background:linear-gradient(115deg,#171d38 0%,#242345 48%,#16404b 100%);border-color:#51405d}
+.hero:after{background:linear-gradient(90deg,#171d38 0%,#171d38d9 42%,#171d3855 100%)}
+.hero h1 em,.page-heading h1 em,.admin-head h1 em{color:#ff87b2}
+.eyebrow,.eyebrow.muted{color:#66d9ce}
+.live-dot{background:#66d9ce;box-shadow:0 0 14px #66d9ce}
+.hero-art .sun{background:linear-gradient(180deg,#ffc078 0%,#ff7e9e 48%,#aa5ac7 100%);box-shadow:0 0 75px #ff7e9e66}
+.ghost-button{border-color:#6b8090;color:#dce7e5}
+.section-heading h2,.page-heading h1{color:#fff4ef}
+.text-link,.category-symbol,.stat-icon{color:#ff87b2}
+.stat-card,.category-card,.map-filters,.map-canvas,.empty-library{background-color:#151b31;border-color:#343a59}
+.stat-card>strong{color:#fff4ef}
+.category-card:hover,.stat-card:hover{border-color:#ff78a8}
+.map-placeholder{background:radial-gradient(ellipse at 50% 50%,#24515a,#1a2440 68%,#11182c)}
+.map-grid-fallback{background:linear-gradient(145deg,#cba5a6,#8eb9b2 55%,#e0c39e);color:#29364d}
+.map-empty{background:#10182aeF;border-color:#ff87b2}
+.map-empty>span,.map-empty .text-link{color:#ff87b2}
+.map-pin.verified{background:#5ed8cc}.map-pin.official{background:#65c8ef}
+.map-marker-details{background:#10182af2;border-color:#ff87b2}
+.map-marker-details .detail-meta{color:#ff87b2}
+.map-marker-details button.is-on{background:#ff87b2;border-color:#ff87b2;color:#17152b}
+.filter-dot.region{background:#ff87b2}.filter-dot.vehicle{background:#ffbd70}
+.filter-dot.mission{background:#65c8ef}.filter-dot.collectible{background:#b58ae8}.filter-dot.secret{background:#5ed8cc}
+.empty-orbit{border-color:#ff87b2;color:#ff87b2;box-shadow:0 0 35px #ff87b222}
+.toast{background:#ff87b2;color:#17152b}
+.footer,.sidebar-bottom{border-color:#343a59}
+@media(max-width:760px){
+ .sidebar{background:#0c1325f5;border-color:#343a59}
+ .nav-item.active{background:#282441;color:#ff91b7}
+}
