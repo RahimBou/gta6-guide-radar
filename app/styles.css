@@ -66,3 +66,11 @@ body{background:#090d18;color:#f8f2ed}
   .sidebar .nav-list{min-width:100%;overflow-x:auto;scrollbar-width:none}
   .sidebar .nav-list::-webkit-scrollbar{display:none}
 }
+
+@media(max-width:760px){
+  .sidebar{display:flex;align-items:center;gap:0;overflow-x:auto;overflow-y:hidden;white-space:nowrap}
+  .sidebar .nav-list{display:flex!important;flex:0 0 auto;width:max-content;min-width:max-content;height:100%;overflow:visible}
+  .sidebar .nav-item{display:flex!important;flex:0 0 64px;min-width:64px}
+  .sidebar .nav-item:nth-child(n+5){display:flex!important}
+  .sidebar .second-label+.nav-list{display:flex!important}
+}
