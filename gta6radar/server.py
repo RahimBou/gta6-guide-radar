@@ -8,7 +8,7 @@ import uuid
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
-from .db import DB_PATH, connect
+from .db import connect
 from .discovery import discover_all
 
 ROOT = Path(__file__).resolve().parent.parent / "app"
