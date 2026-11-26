@@ -68,6 +68,14 @@ class Handler(SimpleHTTPRequestHandler):
             x, y = float(data["x"]), float(data["y"])
             if not (0 <= x <= 100 and 0 <= y <= 100):
                 return self.send_json(400, {"error": "coordinates_out_of_range"})
+            source_url = str(data.get("source_url") or "").strip()
+            source_label = str(data.get("source_label") or "").strip()
+            if data.get("status") in {"official", "corroborated"} and not source_url:
+                return self.send_json(400, {"error": "source_url_required_for_status"})
+            if data.get("status") == "verified_in_game" and not (source_url or source_label):
+                return self.send_json(400, {"error": "proof_reference_required_for_verified_marker"})
+            if source_url and urlparse(source_url).scheme not in {"http", "https"}:
+                return self.send_json(400, {"error": "source_url_must_be_http_or_https"})
             conn = connect()
             conn.execute("""
                 INSERT INTO map_markers
@@ -85,7 +93,7 @@ class Handler(SimpleHTTPRequestHandler):
                 str(data["id"]), str(data["title"])[:160], str(data.get("description", ""))[:3000],
                 data["category"], data.get("status", "unverified"), data.get("platform", "both"),
                 data.get("region"), data.get("grid_ref"), x, y,
-                data.get("source_url"), data.get("source_label"), data.get("verified_at")
+                source_url or None, source_label or None, data.get("verified_at")
             ))
             conn.commit()
             conn.close()
