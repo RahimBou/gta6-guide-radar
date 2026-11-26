@@ -56,3 +56,12 @@ python -m gta6radar.server
 Ouvrir http://127.0.0.1:8080.
 
 La carte réelle et ses marqueurs ne sont pas encore fournis. Le fichier cartographique doit être importé dans chaque navigateur pour le prototype local, et les marqueurs doivent être ajoutés avec leurs sources et coordonnées contrôlées.
+## Back-office des marqueurs
+- Page `app/admin.html`, script `app/admin.js`.
+- Import ou réutilisation du fond de carte local IndexedDB.
+- Clic sur la carte pour calculer x/y normalisés.
+- Saisie du nom, catégorie, statut, plateforme, région, référence de grille et source.
+- Enregistrement par POST /api/markers avec jeton administrateur.
+- Liste des marqueurs existants.
+- Le jeton est conservé en sessionStorage pour l'onglet courant uniquement.
+- Le back-office doit être servi derrière HTTPS dès qu'il est exposé hors de la machine locale.
