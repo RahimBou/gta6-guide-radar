@@ -4,19 +4,29 @@ Outil indépendant de veille et de documentation pour préparer un guide communa
 
 > Projet non affilié à Rockstar Games. Les contenus collectés restent des pistes tant qu'ils n'ont pas été vérifiés en jeu ou corroborés par une source fiable.
 
-## Objectifs du MVP
-- Centraliser les liens publics (TikTok, YouTube, sites et forums) et leurs métadonnées.
-- Importer des flux RSS publics sans contourner les protections des plateformes.
-- Dédupliquer les publications.
-- Classer chaque information par thème et statut de vérification.
-- Préparer une base exploitable pour rédiger le guide.
+## Interface web / PWA
+La première interface est dans le dossier `app/`.
 
-## Démarrage
+Lancement local :
+```bash
+python -m http.server 8080 --directory app
+```
+Puis ouvrir `http://localhost:8080`.
+
+Écrans : tableau de bord, carte de démonstration, découvertes, véhicules, missions, secrets, favoris et progression. La carte est actuellement un schéma non géographique : elle ne prétend pas reproduire la carte officielle du jeu.
+
+## Documentation
+- `docs/STRATEGIE-PRODUIT.md` — stratégie et modèle commercial.
+- `docs/CARTE-LEONIDA.md` — sources, licences et conception cartographique.
+- `docs/ARCHITECTURE-TECHNIQUE.md` — architecture cible.
+- `docs/INTERFACE-MVP.md` — périmètre de l'interface actuelle.
+
+## Collecteur de veille
 Python 3.11 ou supérieur recommandé.
 
 ```bash
 python -m venv .venv
-# Windows : .venv\Scripts\activate
+# Windows : .venv\\Scripts\\activate
 # macOS/Linux :
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -50,11 +60,8 @@ Une vidéo TikTok seule ne constitue pas une preuve. Conserver systématiquement
 
 ## Structure
 ```
-gta6radar/
-  __init__.py
-  __main__.py
-  db.py
-  collector.py
-  cli.py
+app/                  # interface web responsive et PWA
+docs/                 # cadrage produit et architecture
+gta6radar/            # collecteur et CLI Python
 data/                 # base SQLite locale (ignorée par Git)
 ```
