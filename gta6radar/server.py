@@ -1,16 +1,27 @@
-"""Serveur local léger pour l'interface et l'API GTA 6 Guide Radar."""
+"""GTA 6 Guide Radar — API and static application server."""
 import json
 import os
 import re
 import secrets
+import uuid
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 from .db import connect
 
 ROOT = Path(__file__).resolve().parent.parent / "app"
-STATUSES = {"unverified", "to_check", "corroborated", "verified_in_game", "official", "false"}
-CATEGORIES = {"regions", "vehicles", "missions", "collectibles", "secrets", "weapons", "shops", "activities", "other"}
+PLATFORM_HOSTS = {
+    "youtube": {"youtube.com", "www.youtube.com", "youtu.be", "m.youtube.com"},
+    "tiktok": {"tiktok.com", "www.tiktok.com", "vm.tiktok.com"},
+    "twitch": {"twitch.tv", "www.twitch.tv", "m.twitch.tv"},
+}
+
+def detect_platform(url):
+    host = (urlparse(url).hostname or "").lower()
+    for platform, hosts in PLATFORM_HOSTS.items():
+        if host in hosts or any(host.endswith("." + h) for h in hosts):
+            return platform
+    return "other"
 
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -25,87 +36,104 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def read_json(self, max_bytes=20000):
+        length = int(self.headers.get("Content-Length", "0"))
+        if length <= 0 or length > max_bytes:
+            raise ValueError("invalid_payload_size")
+        return json.loads(self.rfile.read(length))
+
+    def authorized(self):
+        token = os.environ.get("GTA6_ADMIN_TOKEN", "")
+        supplied = self.headers.get("Authorization", "").removeprefix("Bearer ").strip()
+        return bool(token) and secrets.compare_digest(token, supplied)
+
     def do_GET(self):
         path = urlparse(self.path).path
         if path == "/api/health":
-            return self.send_json(200, {"ok": True, "service": "gta6-guide-radar"})
-        if path == "/api/markers":
+            return self.send_json(200, {"ok": True, "service": "gta6-guide-radar", "mode": "video-first"})
+        if path == "/api/robot/overview":
+            conn = connect()
+            result = {
+                "videos": conn.execute("SELECT COUNT(*) FROM robot_videos").fetchone()[0],
+                "waiting": conn.execute("SELECT COUNT(*) FROM robot_jobs WHERE status='waiting'").fetchone()[0],
+                "tips": conn.execute("SELECT COUNT(*) FROM robot_tips").fetchone()[0],
+                "published": conn.execute("SELECT COUNT(*) FROM robot_tips WHERE status='published'").fetchone()[0],
+            }
+            conn.close()
+            return self.send_json(200, result)
+        if path == "/api/robot/videos":
             conn = connect()
             rows = conn.execute("""
-                SELECT id,title,description,category,status,platform,region,grid_ref,x,y,
-                       entry_id,source_url,source_label,verified_at
-                FROM map_markers WHERE status != 'false' ORDER BY title COLLATE NOCASE
+                SELECT v.*, (SELECT COUNT(*) FROM robot_evidence e WHERE e.video_id=v.id) AS evidence_count,
+                (SELECT COUNT(*) FROM robot_tips t WHERE t.video_id=v.id) AS tip_count
+                FROM robot_videos v ORDER BY v.created_at DESC LIMIT 100
             """).fetchall()
             conn.close()
             return self.send_json(200, {"items": [dict(row) for row in rows]})
-        if path == "/api/entries":
+        if path == "/api/robot/tips":
             conn = connect()
             rows = conn.execute("""
-                SELECT id,slug,title,summary,category,platform,status,region,grid_ref,updated_at
-                FROM guide_entries WHERE status != 'false' ORDER BY updated_at DESC
+                SELECT t.*, v.title AS video_title, v.url AS video_url
+                FROM robot_tips t JOIN robot_videos v ON v.id=t.video_id
+                ORDER BY t.created_at DESC LIMIT 100
             """).fetchall()
             conn.close()
             return self.send_json(200, {"items": [dict(row) for row in rows]})
         return super().do_GET()
 
     def do_POST(self):
-        if urlparse(self.path).path != "/api/markers":
-            return self.send_json(404, {"error": "not_found"})
-        token = os.environ.get("GTA6_ADMIN_TOKEN", "")
-        supplied = self.headers.get("Authorization", "").removeprefix("Bearer ").strip()
-        if not token or not secrets.compare_digest(token, supplied):
-            return self.send_json(401, {"error": "unauthorized"})
-        try:
-            length = int(self.headers.get("Content-Length", "0"))
-            if length <= 0 or length > 20000:
-                return self.send_json(413, {"error": "invalid_payload_size"})
-            data = json.loads(self.rfile.read(length))
-            required = ("id", "title", "category", "x", "y")
-            if any(key not in data for key in required):
-                return self.send_json(400, {"error": "missing_required_fields"})
-            if data["category"] not in CATEGORIES or data.get("status", "unverified") not in STATUSES:
-                return self.send_json(400, {"error": "invalid_category_or_status"})
-            x, y = float(data["x"]), float(data["y"])
-            if not (0 <= x <= 100 and 0 <= y <= 100):
-                return self.send_json(400, {"error": "coordinates_out_of_range"})
-            source_url = str(data.get("source_url") or "").strip()
-            source_label = str(data.get("source_label") or "").strip()
-            if data.get("status") in {"official", "corroborated"} and not source_url:
-                return self.send_json(400, {"error": "source_url_required_for_status"})
-            if data.get("status") == "verified_in_game" and not (source_url or source_label):
-                return self.send_json(400, {"error": "proof_reference_required_for_verified_marker"})
-            if source_url and urlparse(source_url).scheme not in {"http", "https"}:
-                return self.send_json(400, {"error": "source_url_must_be_http_or_https"})
-            conn = connect()
-            conn.execute("""
-                INSERT INTO map_markers
-                (id,title,description,category,status,platform,region,grid_ref,x,y,
-                 source_url,source_label,verified_at,updated_at)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
-                ON CONFLICT(id) DO UPDATE SET
-                title=excluded.title, description=excluded.description,
-                category=excluded.category, status=excluded.status,
-                platform=excluded.platform, region=excluded.region,
-                grid_ref=excluded.grid_ref, x=excluded.x, y=excluded.y,
-                source_url=excluded.source_url, source_label=excluded.source_label,
-                verified_at=excluded.verified_at, updated_at=CURRENT_TIMESTAMP
-            """, (
-                str(data["id"]), str(data["title"])[:160], str(data.get("description", ""))[:3000],
-                data["category"], data.get("status", "unverified"), data.get("platform", "both"),
-                data.get("region"), data.get("grid_ref"), x, y,
-                source_url or None, source_label or None, data.get("verified_at")
-            ))
-            conn.commit()
-            conn.close()
-            return self.send_json(201, {"ok": True, "id": data["id"]})
-        except (ValueError, TypeError, json.JSONDecodeError):
-            return self.send_json(400, {"error": "invalid_json_or_value"})
+        path = urlparse(self.path).path
+        if path == "/api/robot/videos":
+            try:
+                data = self.read_json()
+                url = str(data.get("url", "")).strip()
+                parsed = urlparse(url)
+                if parsed.scheme != "https" or not parsed.hostname:
+                    return self.send_json(400, {"error": "https_url_required"})
+                if detect_platform(url) == "other" and not data.get("allow_other"):
+                    return self.send_json(400, {"error": "unsupported_video_host"})
+                title = str(data.get("title") or "Vidéo à analyser").strip()[:200]
+                creator = str(data.get("creator") or "").strip()[:120]
+                platform = detect_platform(url)
+                video_id, job_id = str(uuid.uuid4()), str(uuid.uuid4())
+                conn = connect()
+                conn.execute("""
+                    INSERT INTO robot_videos(id,platform,url,title,creator,status)
+                    VALUES(?,?,?,?,?,'detected')
+                """, (video_id, platform, url, title, creator))
+                conn.execute("""
+                    INSERT INTO robot_jobs(id,video_id,stage,status,message)
+                    VALUES(?,?,'rights_check','waiting','Vérifier les droits et les conditions d’accès avant toute analyse média.')
+                """, (job_id, video_id))
+                conn.commit()
+                conn.close()
+                return self.send_json(201, {"ok": True, "id": video_id, "job_id": job_id, "platform": platform, "status": "detected"})
+            except sqlite3.IntegrityError:
+                return self.send_json(409, {"error": "video_already_added"})
+            except (ValueError, TypeError, json.JSONDecodeError):
+                return self.send_json(400, {"error": "invalid_payload"})
+        if path == "/api/robot/tips/review":
+            if not self.authorized():
+                return self.send_json(401, {"error": "unauthorized"})
+            try:
+                data = self.read_json()
+                tip_id, action = str(data.get("id", "")), str(data.get("action", ""))
+                if action not in {"approve", "reject", "publish"}:
+                    return self.send_json(400, {"error": "invalid_action"})
+                next_status = {"approve": "approved", "reject": "rejected", "publish": "published"}[action]
+                conn = connect()
+                cur = conn.execute("UPDATE robot_tips SET status=? WHERE id=?", (next_status, tip_id))
+                conn.commit()
+                conn.close()
+                return self.send_json(200 if cur.rowcount else 404, {"ok": bool(cur.rowcount), "status": next_status})
+            except (ValueError, TypeError, json.JSONDecodeError):
+                return self.send_json(400, {"error": "invalid_payload"})
+        return self.send_json(404, {"error": "not_found"})
 
     def log_message(self, fmt, *args):
         print("%s - %s" % (self.address_string(), fmt % args))
 
 def main():
-    # Render fournit PORT et exige une écoute sur toutes les interfaces.
     host = os.environ.get("GTA6_HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", os.environ.get("GTA6_PORT", "8080")))
     connect().close()
@@ -113,4 +141,5 @@ def main():
     ThreadingHTTPServer((host, port), Handler).serve_forever()
 
 if __name__ == "__main__":
+    import sqlite3
     main()
