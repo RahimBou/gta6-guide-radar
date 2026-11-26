@@ -37,3 +37,22 @@ Servir le dossier `app` via un serveur HTTP statique, par exemple :
 python -m http.server 8080 --directory app
 ```
 Puis ouvrir `http://localhost:8080`.
+
+## Incrément carte et API
+- Import local du fond cartographique dans le navigateur (JPG/PNG/WebP, 30 Mo maximum).
+- Stockage local dans IndexedDB ; l'image n'est pas téléversée sur le serveur.
+- Chargement des marqueurs depuis GET /api/markers, avec repli vers app/data/markers.json.
+- Filtres fonctionnels par catégorie et statut.
+- Marqueurs interactifs avec détail, source, favori et statut trouvé.
+- Panoramique tactile/souris et zoom.
+- Favoris et progression stockés dans le navigateur.
+- API serveur en lecture publique ; écriture des marqueurs protégée par GTA6_ADMIN_TOKEN.
+
+## Lancement avec API
+Depuis la racine du dépôt :
+```bash
+python -m gta6radar.server
+```
+Ouvrir http://127.0.0.1:8080.
+
+La carte réelle et ses marqueurs ne sont pas encore fournis. Le fichier cartographique doit être importé dans chaque navigateur pour le prototype local, et les marqueurs doivent être ajoutés avec leurs sources et coordonnées contrôlées.
