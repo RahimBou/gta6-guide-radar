@@ -2,7 +2,7 @@ import argparse
 from .db import connect
 from .collector import collect_feeds
 
-STATUSES = {"unverified", "to_check", "corroborated", "verified", "false"}
+STATUSES = {"unverified", "to_check", "corroborated", "verified_in_game", "official", "false"}
 PLATFORMS = {"tiktok", "youtube", "reddit", "website", "other"}
 
 def main():
