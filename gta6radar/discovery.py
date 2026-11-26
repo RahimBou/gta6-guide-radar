@@ -8,6 +8,7 @@ import urllib.parse
 import urllib.request
 import urllib.error
 import uuid
+import xml.etree.ElementTree as ET
 from .db import connect
 
 TIMEOUT = 15
@@ -109,9 +110,61 @@ def discover_twitch():
         conn.close()
     return {"platform": "twitch", "added": added}
 
+
+NEWS_QUERIES = [
+    '"Grand Theft Auto VI" guide',
+    '"GTA 6" mission walkthrough',
+    '"GTA 6" map locations collectibles',
+    '"GTA 6" vehicles weapons secrets',
+    'site:rockstargames.com/newswire "Grand Theft Auto VI"',
+]
+
+def discover_public_news():
+    """Index public RSS metadata and links only; never copies article bodies."""
+    added, errors = 0, []
+    conn = connect()
+    try:
+        for query in NEWS_QUERIES:
+            params = urllib.parse.urlencode({"q": query, "hl": "en-US", "gl": "US", "ceid": "US:en"})
+            request = urllib.request.Request(
+                "https://news.google.com/rss/search?" + params,
+                headers={"User-Agent": "GTA6GuideRadar/1.0"})
+            try:
+                with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+                    root = ET.fromstring(response.read())
+                for node in root.findall("./channel/item"):
+                    title = (node.findtext("title") or "").strip()[:300]
+                    link = (node.findtext("link") or "").strip()
+                    summary = (node.findtext("description") or "").strip()[:1200]
+                    published = (node.findtext("pubDate") or "").strip()
+                    if not title or not link.startswith("https://"):
+                        continue
+                    low = title.lower()
+                    category = "news"
+                    if any(k in low for k in ("mission", "walkthrough", "chapter", "story")):
+                        category = "mission_guide"
+                    elif any(k in low for k in ("map", "location", "collectible", "secret")):
+                        category = "map_discovery"
+                    elif any(k in low for k in ("vehicle", "car", "weapon")):
+                        category = "vehicle_gear"
+                    elif any(k in low for k in ("update", "patch", "fix")):
+                        category = "updates"
+                    cur = conn.execute("""
+                        INSERT OR IGNORE INTO items
+                        (platform,url,title,summary,category,status,published_at)
+                        VALUES('news_rss',?,?,?,?, 'unverified',?)
+                    """, (link, title, summary, category, published))
+                    added += max(cur.rowcount, 0)
+            except (urllib.error.URLError, TimeoutError, ET.ParseError, ValueError) as exc:
+                errors.append(str(exc)[:180])
+        conn.commit()
+    finally:
+        conn.close()
+    return {"platform": "public_news_rss", "added": added, "queries": len(NEWS_QUERIES), "errors": errors[:3]}
+
 def discover_all():
     results = []
-    for fn in (discover_youtube, discover_twitch):
+    for fn in (discover_public_news, discover_youtube, discover_twitch):
         try:
             results.append(fn())
         except (urllib.error.URLError, TimeoutError, ValueError, KeyError) as exc:
