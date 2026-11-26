@@ -9,6 +9,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 from .db import connect
+from .discovery import discover_all
 
 ROOT = Path(__file__).resolve().parent.parent / "app"
 PLATFORM_HOSTS = {
@@ -62,6 +63,10 @@ class Handler(SimpleHTTPRequestHandler):
             }
             conn.close()
             return self.send_json(200, result)
+        if path == "/api/robot/discover":
+            if not self.authorized():
+                return self.send_json(401, {"error": "unauthorized"})
+            return self.send_json(200, {"results": discover_all()})
         if path == "/api/robot/videos":
             conn = connect()
             rows = conn.execute("""
