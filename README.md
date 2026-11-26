@@ -4,71 +4,49 @@ Outil indépendant de veille et de documentation pour préparer un guide communa
 
 > Projet non affilié à Rockstar Games. Les contenus ne sont publiés comme confirmés qu'après vérification et avec leurs sources.
 
-## Interface web / PWA
-La première interface se trouve dans `app/` : tableau de bord, carte, catégories, favoris et progression.
+## Versions du produit
+- Interface web/PWA existante : dossier app/ à la racine.
+- Backend prototype Python/SQLite : package gta6radar/.
+- Nouvelle application mobile Android/iOS : dossier mobile/.
+- Architecture et plan de transformation : docs/PLAN-MOBILE.md.
 
-## Lancement avec l'API SQLite
-Depuis la racine du dépôt :
-```bash
-python -m gta6radar.server
-```
-Puis ouvrir http://127.0.0.1:8080.
+## Application mobile
+Depuis le dossier mobile :
 
-API :
-- `GET /api/health` — état du serveur.
-- `GET /api/markers` — marqueurs cartographiques publics.
-- `GET /api/entries` — fiches publiques.
-- Back-office cartographique : http://127.0.0.1:8080/admin.html
-- `POST /api/markers` — ajout/mise à jour protégé par un jeton administrateur.
+    npm install
+    npx expo install --fix
+    npx expo install --check
+    npm run typecheck
+    npx expo start
 
-Pour autoriser l'écriture, définir `GTA6_ADMIN_TOKEN` dans l'environnement du serveur. Ne jamais placer ce secret dans le code frontend. Pour exposer le serveur dans un environnement d'hébergement, configurer `GTA6_HOST=0.0.0.0`, le port fourni par l'hébergeur et un reverse proxy HTTPS. Ne pas exposer le serveur directement sur Internet sans HTTPS et sans contrôle d'accès réseau.
+La structure mobile est un premier squelette. La carte native, les comptes, la synchronisation, les achats et les données hors connexion restent à développer.
 
-## Import de la carte officielle
-1. Ouvrir la page média officielle : https://www.rockstargames.com/VI/media.
-2. Télécharger « Leonida Map - Printable » dans le bloc « Leonida Map & Cover Art Poster ».
-3. Extraire le JPG du ZIP.
-4. Ouvrir le module Carte et importer le JPG.
+## API prototype
+Depuis la racine :
 
-Dans cette première version, l'image est stockée dans IndexedDB sur le navigateur utilisé. Elle n'est pas téléversée au serveur. Les autres visiteurs devront importer leur propre copie. Avant d'héberger ou redistribuer l'image, vérifier les conditions d'utilisation et les droits applicables.
+    python -m gta6radar.server
 
-## Marqueurs et données
-- Le fichier `app/data/markers.json` est volontairement vide.
-- Aucun emplacement n'est inventé ou présenté comme vérifié.
-- Les marqueurs utilisent des coordonnées normalisées x/y de 0 à 100 et une référence de grille facultative.
-- Les statuts sont `unverified`, `to_check`, `corroborated`, `verified_in_game`, `official` et `false`.
-- Les sources, dates de vérification et plateformes doivent être conservées.
+Routes actuellement disponibles :
+- GET /api/health
+- GET /api/markers
+- GET /api/entries
+- POST /api/markers (jeton administrateur)
 
-## Collecteur de veille
-Python 3.11 ou supérieur recommandé.
-```bash
-python -m venv .venv
-# Windows : .venv\\Scripts\\activate
-# macOS/Linux :
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m gta6radar init
-python -m gta6radar add-source --name "Flux de test" --url "https://example.com/feed.xml" --kind rss
-python -m gta6radar collect
-python -m gta6radar list
-```
+Le serveur et sa base SQLite actuels ne constituent pas encore une infrastructure de production. Ne pas y enregistrer de données utilisateurs importantes avant migration vers une base persistante.
 
-Pour ajouter manuellement un lien TikTok, YouTube ou autre :
-```bash
-python -m gta6radar add-item --url "https://www.tiktok.com/@compte/video/ID" --title "Titre de la vidéo" --platform tiktok
-```
-
-Le collecteur RSS ne garantit pas que TikTok expose ses vidéos dans des flux publics. Les liens peuvent être ajoutés manuellement. Aucun contournement de connexion, CAPTCHA ou mécanisme anti-robot n'est prévu.
+## Règles éditoriales
+- Aucun emplacement n'est inventé.
+- Les statuts de vérification restent visibles.
+- Les sources et licences sont conservées.
+- Les données de fuite ou obtenues illicitement sont exclues.
+- Les images, cartes et données communautaires ne sont réutilisées qu'après vérification des droits.
 
 ## Documentation
-- `docs/STRATEGIE-PRODUIT.md` — stratégie et modèle commercial.
-- `docs/CARTE-LEONIDA.md` — carte, licences et coordonnées.
-- `docs/ARCHITECTURE-TECHNIQUE.md` — architecture cible.
-- `docs/INTERFACE-MVP.md` — fonctions de l'interface actuelle.
+- docs/STRATEGIE-PRODUIT.md
+- docs/CARTE-LEONIDA.md
+- docs/ARCHITECTURE-TECHNIQUE.md
+- docs/INTERFACE-MVP.md
+- docs/PLAN-MOBILE.md
 
-## Structure
-```
-app/                  # interface responsive et PWA
-docs/                 # stratégie et architecture
-gta6radar/            # collecteur, SQLite et API
-data/                 # base SQLite locale ignorée par Git
-```
+## Séparation des projets
+Ce dépôt est indépendant de JML Immobilier et de son infrastructure. Aucun serveur ni fichier JML ne doit être utilisé par ce projet.
