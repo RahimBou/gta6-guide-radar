@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101411">
+  <meta name="description" content="Compagnon indépendant GTA 6 : carte, découvertes, véhicules, missions et progression.">
+  <title>Leonida — GTA 6 Guide Radar</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Leonida accueil">
+        <span class="brand-mark">L<span>6</span></span>
+        <span class="brand-copy"><strong>LEONIDA</strong><small>FIELD COMPANION</small></span>
+      </a>
+      <div class="side-label">EXPLORATION</div>
+      <nav class="nav-list" aria-label="Navigation principale">
+        <button class="nav-item active" data-view="overview"><span class="nav-icon">◫</span>Vue d'ensemble</button>
+        <button class="nav-item" data-view="map"><span class="nav-icon">⌖</span>Carte interactive</button>
+        <button class="nav-item" data-view="discoveries"><span class="nav-icon">✳</span>Découvertes</button>
+        <button class="nav-item" data-view="vehicles"><span class="nav-icon">▰</span>Véhicules</button>
+        <button class="nav-item" data-view="missions"><span class="nav-icon">◈</span>Missions & activités</button>
+        <button class="nav-item" data-view="secrets"><span class="nav-icon">⌁</span>Secrets & collections</button>
+      </nav>
+      <div class="side-label second-label">MON ESPACE</div>
+      <nav class="nav-list">
+        <button class="nav-item" data-view="saved"><span class="nav-icon">♡</span>Mes favoris</button>
+        <button class="nav-item" data-view="progress"><span class="nav-icon">◴</span>Ma progression</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="console-card"><span class="pulse"></span><div><small>PLATEFORMES SUIVIES</small><strong>PS5 <i>•</i> XBOX SERIES X|S</strong></div></div>
+        <div class="profile-mini"><div class="avatar">G</div><div><strong>Joueur invité</strong><small>Progression locale</small></div><span class="more">···</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">L<span>6</span></span><strong>LEONIDA</strong></div>
+        <div class="breadcrumb"><span>COMPANION</span><b>/</b><strong id="crumb">VUE D'ENSEMBLE</strong></div>
+        <div class="top-actions">
+          <label class="global-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Rechercher un lieu, un véhicule…" autocomplete="off"><kbd>⌘ K</kbd></label>
+          <button class="icon-button" id="notifications" aria-label="Notifications">♧<i></i></button>
+          <button class="upgrade-button" id="premiumButton">PASSER PREMIUM <span>↗</span></button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="eyebrow"><span class="live-dot"></span> VOTRE COMPAGNON D'EXPLORATION</div>
+            <h1>WELCOME TO<br><em>LEONIDA.</em></h1>
+            <p>Tout ce qu'il faut découvrir. Un seul endroit pour tout retrouver.</p>
+            <div class="hero-buttons"><button class="primary-button" data-goto="map">EXPLORER LA CARTE <span>↗</span></button><button class="ghost-button" data-goto="discoveries">VOIR LES DÉCOUVERTES</button></div>
+          </div>
+          <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="palm palm-one">♧</div><div class="palm palm-two">♧</div><div class="coastline"></div><div class="hero-stamp">VICE<br><b>CITY</b><small>LEONIDA / USA</small></div></div>
+          <div class="hero-index">01 <span>—</span> 04</div>
+        </div>
+
+        <div class="section-heading"><div><div class="eyebrow muted">VOTRE TABLEAU DE BORD</div><h2>Reprendre l'exploration</h2></div><button class="text-link" data-goto="progress">MA PROGRESSION ↗</button></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>COLLECTÉ</span><span class="stat-icon">✳</span></div><strong id="foundCount">0</strong><small>Découvertes enregistrées</small><div class="stat-line"><span style="width:0%" id="foundBar"></span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>À EXPLORER</span><span class="stat-icon">⌖</span></div><strong>—</strong><small>Emplacements à confirmer</small><div class="stat-note">Les données arrivent après vérification</div></article>
+          <article class="stat-card"><div class="stat-top"><span>FAVORIS</span><span class="stat-icon">♡</span></div><strong id="favoriteCount">0</strong><small>Vos fiches sauvegardées</small><div class="stat-note">Synchronisation locale pour le moment</div></article>
+          <article class="stat-card"><div class="stat-top"><span>PLATEFORMES</span><span class="stat-icon">▣</span></div><strong>02</strong><small>PS5 & Xbox Series X|S</small><div class="platform-pills"><span>PS5</span><span>XBOX</span></div></article>
+        </div>
+
+        <div class="section-heading compact"><div><div class="eyebrow muted">ACCÈS RAPIDE</div><h2>Choisir une catégorie</h2></div><span class="subtle">TOUT LE GUIDE, À PORTÉE DE MAIN</span></div>
+        <div class="category-grid">
+          <button class="category-card category-map" data-goto="map"><span class="category-symbol">⌖</span><span><strong>Carte de Leonida</strong><small>Explorer les régions et lieux</small></span><b>↗</b></button>
+          <button class="category-card" data-goto="vehicles"><span class="category-symbol">▰</span><span><strong>Véhicules</strong><small>Voitures, motos, bateaux…</small></span><b>↗</b></button>
+          <button class="category-card" data-goto="discoveries"><span class="category-symbol">✳</span><span><strong>Armes & équipements</strong><small>Guides et emplacements vérifiés</small></span><b>↗</b></button>
+          <button class="category-card" data-goto="missions"><span class="category-symbol">◈</span><span><strong>Missions & activités</strong><small>Étapes, objectifs et astuces</small></span><b>↗</b></button>
+          <button class="category-card" data-goto="secrets"><span class="category-symbol">⌁</span><span><strong>Secrets & collections</strong><small>Objets rares et mystères</small></span><b>↗</b></button>
+          <button class="category-card" data-goto="saved"><span class="category-symbol">♡</span><span><strong>Mes favoris</strong><small>Retrouver vos fiches</small></span><b>↗</b></button>
+        </div>
+        <div class="notice"><span>i</span><p><strong>Projet communautaire indépendant.</strong> Les informations affichées dans cette première version sont des éléments de démonstration. Les découvertes seront publiées après contrôle des sources.</p></div>
+      </section>
+
+      <section class="view" id="view-map">
+        <div class="page-heading"><div><div class="eyebrow muted">EXPLORATION / LEONIDA</div><h1>La carte <em>interactive.</em></h1><p>Explorez les régions, filtrez les catégories et retrouvez vos marqueurs.</p></div><span class="map-status"><i></i> CARTE EN PRÉPARATION</span></div>
+        <div class="map-layout">
+          <aside class="map-filters">
+            <div class="filter-title">FILTRES <button id="clearFilters">EFFACER</button></div>
+            <label class="map-search">⌕ <input id="mapSearch" placeholder="Rechercher un lieu…"></label>
+            <div class="filter-group"><span>CATÉGORIES</span>
+              <label><input type="checkbox" checked value="regions"> <i class="filter-dot region"></i> Régions & quartiers</label>
+              <label><input type="checkbox" checked value="vehicles"> <i class="filter-dot vehicle"></i> Véhicules</label>
+              <label><input type="checkbox" checked value="missions"> <i class="filter-dot mission"></i> Missions & activités</label>
+              <label><input type="checkbox" checked value="collectibles"> <i class="filter-dot collectible"></i> Collections</label>
+              <label><input type="checkbox" checked value="secrets"> <i class="filter-dot secret"></i> Secrets</label>
+            </div>
+            <div class="filter-group"><span>FIABILITÉ</span>
+              <label><input type="checkbox" checked value="verified"> Confirmé en jeu</label>
+              <label><input type="checkbox" checked value="official"> Source officielle</label>
+              <label><input type="checkbox" checked value="unverified"> À vérifier</label>
+            </div>
+            <div class="map-legend"><span>STATUT DES MARQUEURS</span><p><i class="legend-dot green"></i> Confirmé en jeu</p><p><i class="legend-dot blue"></i> Source officielle</p><p><i class="legend-dot amber"></i> À vérifier</p></div>
+          </aside>
+          <div class="map-canvas">
+            <div class="map-toolbar"><span>LEONIDA <b>/</b> VUE GÉNÉRALE</span><div><button id="zoomOut">−</button><button id="zoomIn">+</button><button id="resetMap">⌖</button></div></div>
+            <div class="map-placeholder" id="mapCanvas">
+              <div class="map-water-label water-one">GULF OF MEXICO</div><div class="map-water-label water-two">ATLANTIC OCEAN</div>
+              <svg class="map-art" viewBox="0 0 900 600" role="img" aria-label="Schéma provisoire de la carte de Leonida, non géographique">
+                <defs><pattern id="terrain" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M0 18 Q9 8 18 18 T36 18" fill="none" stroke="#647b60" stroke-opacity=".12" stroke-width="1"/></pattern></defs>
+                <path class="land" d="M214 45 C280 22 366 44 425 65 C486 86 535 62 604 86 C674 110 700 161 735 205 C767 245 750 289 782 334 C802 364 769 421 727 442 C687 462 683 509 630 530 C576 551 534 525 493 548 C440 575 395 538 355 515 C313 491 264 505 228 468 C190 429 168 397 177 351 C187 304 142 268 159 218 C174 173 158 95 214 45 Z"/>
+                <path class="terrain" d="M214 45 C280 22 366 44 425 65 C486 86 535 62 604 86 C674 110 700 161 735 205 C767 245 750 289 782 334 C802 364 769 421 727 442 C687 462 683 509 630 530 C576 551 534 525 493 548 C440 575 395 538 355 515 C313 491 264 505 228 468 C190 429 168 397 177 351 C187 304 142 268 159 218 C174 173 158 95 214 45 Z"/>
+                <path class="road" d="M228 140 C330 180 365 145 460 190 S620 245 720 220 M185 315 C300 275 365 320 450 285 S620 345 760 370 M270 460 C330 390 420 410 485 455 S600 470 690 425"/>
+                <path class="road thin" d="M330 75 C340 170 300 220 355 310 S390 430 430 525 M560 90 C535 190 590 250 555 340 S570 460 620 515"/>
+                <path class="river" d="M280 65 C320 125 275 175 325 225 S355 330 420 350 S465 450 520 520"/>
+                <text x="455" y="235" class="map-city">VICE CITY</text><text x="455" y="255" class="map-region">SOUTH LEONIDA</text>
+                <text x="265" y="380" class="map-region">GRASSRIVERS</text><text x="585" y="390" class="map-region">THE KEYS</text><text x="320" y="120" class="map-region">AMBER ROCK</text>
+              </svg>
+              <div class="map-empty"><span>⌖</span><strong>La carte détaillée arrive bientôt</strong><p>Ce schéma est une maquette d'interface, pas la géographie officielle du jeu. Le fond autorisé et les coordonnées validées seront intégrés ici.</p><button class="ghost-button" data-goto="discoveries">CONSULTER LES SOURCES</button></div>
+              <div class="map-scale">APERÇU SCHÉMATIQUE · NON GÉOGRAPHIQUE</div>
+            </div>
+            <div class="map-bottom"><span id="markerCount">0 marqueur affiché</span><span>Les positions non vérifiées restent masquées de la carte publique.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-discoveries">
+        <div class="page-heading"><div><div class="eyebrow muted">BASE DE CONNAISSANCES</div><h1>Les <em>découvertes.</em></h1><p>Une bibliothèque de fiches sourcées, classées et vérifiées.</p></div><span class="count-chip">0 FICHE VALIDÉE</span></div>
+        <div class="empty-library"><div class="empty-orbit">✳</div><h2>La base se construit.</h2><p>Les découvertes issues des créateurs, forums et sources publiques seront ajoutées ici après vérification. Aucune astuce non confirmée ne sera présentée comme un fait.</p><button class="primary-button" data-goto="map">OUVRIR LA CARTE <span>↗</span></button></div>
+      </section>
+      <section class="view" id="view-vehicles"><div class="page-heading"><div><div class="eyebrow muted">GARAGE / MOBILITÉ</div><h1>Véhicules <em>& garages.</em></h1><p>Voitures, motos, bateaux, avions et emplacements à découvrir.</p></div></div><div class="empty-library"><div class="empty-orbit">▰</div><h2>Garage en préparation.</h2><p>Les véhicules et emplacements seront publiés avec leur source et leur statut de vérification.</p></div></section>
+      <section class="view" id="view-missions"><div class="page-heading"><div><div class="eyebrow muted">ACTIVITÉS / PROGRESSION</div><h1>Missions <em>& activités.</em></h1><p>Guides étape par étape, objectifs et progression personnelle.</p></div></div><div class="empty-library"><div class="empty-orbit">◈</div><h2>Le journal arrive bientôt.</h2><p>Les guides seront organisés par mission, activité et plateforme.</p></div></section>
+      <section class="view" id="view-secrets"><div class="page-heading"><div><div class="eyebrow muted">EXPLORATION / COLLECTIONS</div><h1>Secrets <em>& mystères.</em></h1><p>Objets rares, lieux cachés, animaux et découvertes communautaires.</p></div></div><div class="empty-library"><div class="empty-orbit">⌁</div><h2>Le dossier est ouvert.</h2><p>Les rumeurs resteront séparées des éléments confirmés.</p></div></section>
+      <section class="view" id="view-saved"><div class="page-heading"><div><div class="eyebrow muted">VOTRE ESPACE</div><h1>Mes <em>favoris.</em></h1><p>Vos fiches enregistrées sur cet appareil.</p></div></div><div class="empty-library"><div class="empty-orbit">♡</div><h2>Aucun favori pour le moment.</h2><p>Enregistrez les fiches qui vous intéressent pour les retrouver ici.</p></div></section>
+      <section class="view" id="view-progress"><div class="page-heading"><div><div class="eyebrow muted">VOTRE ESPACE</div><h1>Ma <em>progression.</em></h1><p>Suivez votre exploration et vos objectifs.</p></div></div><div class="empty-library"><div class="empty-orbit">◴</div><h2>Votre progression commence ici.</h2><p>Le suivi sera alimenté au fur et à mesure des fiches confirmées et des marqueurs enregistrés.</p></div></section>
+
+      <footer class="footer"><span>LEONIDA FIELD COMPANION <b>·</b> VERSION 0.1</span><span>PROJET INDÉPENDANT — NON AFFILIÉ À ROCKSTAR GAMES</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
