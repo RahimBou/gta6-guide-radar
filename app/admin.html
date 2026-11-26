@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101411"><title>Administration — Leonida</title><link rel="stylesheet" href="./styles.css"></head>
+<body class="admin-body">
+<main class="admin-wrap">
+<header class="admin-head"><a href="./index.html" class="text-link">← RETOUR À L'APPLICATION</a><span class="eyebrow">LEONIDA / BACK OFFICE</span><h1>Gestion des <em>marqueurs.</em></h1><p>Ajoutez des emplacements avec leurs coordonnées et leurs preuves. Aucun marqueur n'est publié sans source.</p></header>
+<section class="admin-token"><label>JETON ADMINISTRATEUR<input id="adminToken" type="password" autocomplete="off" placeholder="GTA6_ADMIN_TOKEN"></label><small>Le jeton est conservé uniquement dans la session de cet onglet.</small></section>
+<div class="admin-grid">
+<section class="admin-panel">
+<h2>01 · Position sur la carte</h2>
+<p>Importez le JPG officiel ou réutilisez la carte déjà importée dans l'application, puis cliquez sur la position exacte.</p>
+<label class="map-import-button">IMPORTER UNE IMAGE<input id="adminMapUpload" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>
+<div class="admin-map-wrap"><div id="adminMap" class="admin-map"><div id="adminMapHint">Importez la carte officielle pour sélectionner un emplacement.</div><img id="adminMapImage" alt="Fond de carte Leonida" hidden></div></div>
+<div class="coord-display"><span>COORDONNÉES RELATIVES</span><strong id="coordValue">X — · Y —</strong></div>
+<label>RÉFÉRENCE DE GRILLE<input id="gridRef" placeholder="Ex. G7"></label>
+</section>
+<section class="admin-panel">
+<h2>02 · Fiche du marqueur</h2>
+<form id="markerForm">
+<label>Nom du lieu ou de la découverte<input id="title" required maxlength="160" placeholder="Nom précis"></label>
+<label>Catégorie<select id="category" required><option value="regions">Région / quartier</option><option value="vehicles">Véhicule</option><option value="missions">Mission / activité</option><option value="collectibles">Collection</option><option value="secrets">Secret</option><option value="weapons">Arme / équipement</option><option value="shops">Commerce / service</option><option value="other">Autre</option></select></label>
+<label>Statut de fiabilité<select id="status" required><option value="unverified">À vérifier</option><option value="to_check">À contrôler</option><option value="corroborated">Corroboré</option><option value="verified_in_game">Confirmé en jeu</option><option value="official">Source officielle</option><option value="false">Réfuté</option></select></label>
+<label>Plateforme<select id="platform"><option value="both">PS5 et Xbox</option><option value="ps5">PS5</option><option value="xbox">Xbox Series X|S</option></select></label>
+<label>Région<input id="region" placeholder="Ex. Vice City"></label>
+<label>Description<textarea id="description" rows="4" maxlength="3000" placeholder="Étapes, repères, conditions…"></textarea></label>
+<label>URL de la source<input id="sourceUrl" type="url" placeholder="https://…"></label>
+<label>Nom de la source<input id="sourceLabel" placeholder="Rockstar, créateur, guide…"></label>
+<button class="primary-button" type="submit">ENREGISTRER LE MARQUEUR ↗</button>
+<p id="formStatus" role="status" class="admin-feedback">Le marqueur sera envoyé à l'API après validation.</p>
+</form>
+</section>
+</div>
+<section class="admin-panel admin-list"><h2>03 · Marqueurs enregistrés</h2><div id="markerList">Chargement…</div></section>
+<footer class="footer"><span>LEONIDA FIELD COMPANION · BACK OFFICE</span><span>UTILISER DES SOURCES ET COORDONNÉES VÉRIFIÉES</span></footer>
+</main><script src="./admin.js"></script></body></html>
