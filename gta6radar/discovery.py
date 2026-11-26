@@ -18,6 +18,16 @@ QUERIES = [
     "GTA 6 secrets locations",
     "GTA VI vehicles guide",
     "GTA 6 hidden details",
+    "GTA 6 beginner tips settings money police",
+    "GTA 6 Chapter 1 mission walkthrough",
+    "GTA 6 Chapter 2 mission walkthrough",
+    "GTA 6 collectibles 100 percent guide",
+    "GTA 6 map locations easter eggs",
+    "GTA 6 weapons rare vehicles locations",
+    "GTA 6 gameplay astuces guide français",
+    "GTA 6 solution missions français",
+    "GTA 6 secrets easter eggs français",
+    "GTA 6 carte objets cachés collectibles français",
 ]
 
 def _get_json(url, headers=None):
@@ -117,6 +127,13 @@ NEWS_QUERIES = [
     '"GTA 6" map locations collectibles',
     '"GTA 6" vehicles weapons secrets',
     'site:rockstargames.com/newswire "Grand Theft Auto VI"',
+    '"GTA 6" astuces guide français',
+    '"GTA 6" solution mission chapitre',
+    '"GTA 6" argent braquage codes coffre',
+    '"GTA 6" véhicules rares armes uniques',
+    '"GTA 6" trophées 100% collectibles',
+    '"GTA VI" gameplay tips secrets',
+    '"GTA 6" mise à jour patch notes',
 ]
 
 def discover_public_news():
