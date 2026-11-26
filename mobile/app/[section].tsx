@@ -12,6 +12,7 @@ const config: Record<string,{title:string;intro:string;endpoint:string;empty:str
   secrets:{title:"Secrets & collections",intro:"Secrets, objets et collections enregistrés.",endpoint:"/api/guide/entries?category=secret",empty:"Aucun secret documenté pour le moment."},
   progress:{title:"Ma progression",intro:"Votre suivi local des modules et des découvertes.",endpoint:"/api/guide/entries",empty:"La progression sera alimentée à mesure que vous marquerez des fiches comme terminées."},
   robot:{title:"Robot Radar",intro:"Ajoutez une vidéo publique : le robot crée une tâche de contrôle et de traitement.",endpoint:"/api/robot/videos",empty:"Aucune source vidéo enregistrée."},
+  sources:{title:"Sources & actualités",intro:"Liens et métadonnées issus des flux publics GTA VI. Chaque élément reste non vérifié jusqu’à contrôle.",endpoint:"/api/robot/items",empty:"Aucune actualité collectée. Le robot doit effectuer une recherche depuis le serveur."},
 };
 
 export default function SectionScreen() {
