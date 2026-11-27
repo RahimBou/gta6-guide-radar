@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
-import { useState } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { useRef, useState } from "react";
+import { Image, PanResponder, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const MAP_IMAGE = "https://guides-gta6.com/media/map/leonida-official.jpg";
@@ -24,8 +24,34 @@ const sections = [
 export default function HomeScreen() {
   const { width } = useWindowDimensions();
   const [selected,setSelected] = useState<string>("vicecity");
+  const [zoom,setZoom] = useState(1);
+  const [offset,setOffset] = useState({x:0,y:0});
+  const gesture = useRef({x:0,y:0,baseDistance:0,baseZoom:1});
   const region = regions.find(r=>r.id===selected) || regions[0];
   const mapWidth = Math.min(width-32,620);
+  const mapHeight = mapWidth/(731/1000);
+  const clampZoom = (value:number) => Math.max(1,Math.min(3,value));
+  const panResponder = useRef(PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderGrant: (evt) => {
+      const t = evt.nativeEvent.touches;
+      gesture.current = {x:offset.x,y:offset.y,baseDistance:t.length>1?Math.hypot(t[0].pageX-t[1].pageX,t[0].pageY-t[1].pageY):0,baseZoom:zoom};
+    },
+    onPanResponderMove: (evt,gs) => {
+      const t = evt.nativeEvent.touches;
+      if (t.length>1) {
+        const d = Math.hypot(t[0].pageX-t[1].pageX,t[0].pageY-t[1].pageY);
+        if (gesture.current.baseDistance>0) setZoom(clampZoom(gesture.current.baseZoom*d/gesture.current.baseDistance));
+      } else if (zoom>1) {
+        setOffset({x:gesture.current.x+gs.dx,y:gesture.current.y+gs.dy});
+      }
+    },
+    onPanResponderRelease: () => {
+      if (zoom<=1) setOffset({x:0,y:0});
+    },
+    onPanResponderTerminationRequest: () => false
+  })).current;
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -40,15 +66,23 @@ export default function HomeScreen() {
         </View>
         <Text style={styles.mapIntro}>Choisis une région directement sur la carte de Leonida.</Text>
 
-        <View style={[styles.mapShell,{width:mapWidth}]}>
-          <Image source={{uri:MAP_IMAGE}} style={styles.mapImage} resizeMode="contain" />
-          {regions.map((r,i)=>(
-            <Pressable key={r.id} onPress={()=>setSelected(r.id)} accessibilityRole="button" accessibilityLabel={"Sélectionner "+r.name}
-              style={[styles.pin,{left:r.x+"%",top:r.y+"%"},selected===r.id&&styles.pinActive]}>
-              <Text style={styles.pinText}>{i+1}</Text>
-            </Pressable>
-          ))}
+        <View style={[styles.mapShell,{width:mapWidth,height:mapHeight}]} {...panResponder.panHandlers}>
+          <View style={[styles.mapCanvas,{transform:[{translateX:offset.x},{translateY:offset.y},{scale:zoom}],width:mapWidth,height:mapHeight}]}>
+            <Image source={{uri:MAP_IMAGE}} style={styles.mapImage} resizeMode="stretch" />
+            {regions.map((r,i)=>(
+              <Pressable key={r.id} onPress={()=>setSelected(r.id)} accessibilityRole="button" accessibilityLabel={"Sélectionner "+r.name}
+                style={[styles.pin,{left:r.x+"%",top:r.y+"%"},selected===r.id&&styles.pinActive]}>
+                <Text style={styles.pinText}>{i+1}</Text>
+              </Pressable>
+            ))}
+          </View>
+          <View style={styles.zoomControls}>
+            <Pressable accessibilityLabel="Zoom avant" onPress={()=>setZoom(v=>clampZoom(v+0.25))} style={styles.zoomButton}><Text style={styles.zoomText}>＋</Text></Pressable>
+            <Pressable accessibilityLabel="Zoom arrière" onPress={()=>{setZoom(v=>{const n=clampZoom(v-0.25);if(n===1)setOffset({x:0,y:0});return n;});}} style={styles.zoomButton}><Text style={styles.zoomText}>−</Text></Pressable>
+            <Pressable accessibilityLabel="Recentrer la carte" onPress={()=>{setZoom(1);setOffset({x:0,y:0});}} style={styles.zoomButton}><Text style={styles.zoomText}>⌖</Text></Pressable>
+          </View>
         </View>
+        <Text style={styles.gestureHint}>Pince pour zoomer · Fais glisser pour déplacer · + / − pour régler le zoom</Text>
         <View style={styles.regionCard}>
           <View style={styles.regionTop}><Text style={styles.regionLabel}>{region.county}</Text><Text style={styles.regionNumber}>RÉGION {regions.findIndex(r=>r.id===selected)+1}/6</Text></View>
           <Text style={styles.regionTitle}>{region.name}</Text>
@@ -63,8 +97,13 @@ export default function HomeScreen() {
         <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Ton guide de jeu</Text><Text style={styles.sectionSub}>Accès rapide aux autres rubriques</Text></View>
         <View style={styles.grid}>
           {sections.map(item=>(
-            <Link key={item.href} href={item.href} style={styles.card}>
-              <Text style={styles.cardSymbol}>{item.symbol}</Text><Text style={styles.cardTitle}>{item.title}</Text><Text style={styles.cardDetail}>{item.detail}</Text><Text style={styles.cardArrow}>OUVRIR ↗</Text>
+            <Link key={item.href} href={item.href} asChild>
+              <Pressable style={styles.card}>
+                <Text style={styles.cardSymbol}>{item.symbol}</Text>
+                <Text style={styles.cardTitle}>{item.title}</Text>
+                <Text style={styles.cardDetail}>{item.detail}</Text>
+                <Text style={styles.cardArrow}>OUVRIR ↗</Text>
+              </Pressable>
             </Link>
           ))}
         </View>
@@ -88,7 +127,12 @@ const styles = StyleSheet.create({
   fullMap:{color:"#ff9acb",fontSize:10,fontWeight:"900",paddingBottom:5},
   mapIntro:{color:"#d0b9d0",fontSize:13,marginTop:7,marginBottom:13},
   mapShell:{alignSelf:"center",position:"relative",borderWidth:1,borderColor:"#8e5a82",borderRadius:14,overflow:"hidden",backgroundColor:"#142f2b"},
-  mapImage:{width:"100%",aspectRatio:731/1000},
+  mapCanvas:{position:"absolute",left:0,top:0,transformOrigin:"center"},
+  mapImage:{width:"100%",height:"100%"},
+  zoomControls:{position:"absolute",right:9,bottom:9,gap:6},
+  zoomButton:{width:38,height:38,borderRadius:20,backgroundColor:"#261531",borderWidth:1,borderColor:"#f58bc5",alignItems:"center",justifyContent:"center"},
+  zoomText:{color:"#fff9f7",fontSize:22,fontWeight:"900"},
+  gestureHint:{color:"#b99eb9",fontSize:10,textAlign:"center",marginTop:6},
   pin:{position:"absolute",width:29,height:29,marginLeft:-14,marginTop:-14,borderRadius:18,borderWidth:2,borderColor:"#fff",backgroundColor:"#e85eaa",alignItems:"center",justifyContent:"center",elevation:5},
   pinActive:{backgroundColor:"#ff9a32",width:37,height:37,marginLeft:-18,marginTop:-18,borderColor:"#fff4d8"},
   pinText:{color:"#24102f",fontSize:11,fontWeight:"900"},
@@ -109,7 +153,7 @@ const styles = StyleSheet.create({
   sectionTitle:{color:"#fff9f7",fontSize:20,fontWeight:"900"},
   sectionSub:{color:"#cbb6ce",fontSize:12,marginTop:3},
   grid:{flexDirection:"row",flexWrap:"wrap",gap:10,justifyContent:"space-between"},
-  card:{width:"48%",minWidth:145,backgroundColor:"#211829",borderColor:"#4b344f",borderWidth:1,borderRadius:13,padding:14,minHeight:130},
+  card:{width:"48%",minWidth:145,flexGrow:1,flexBasis:"46%",backgroundColor:"#211829",borderColor:"#4b344f",borderWidth:1,borderRadius:13,padding:14,minHeight:112,justifyContent:"flex-start"},
   cardSymbol:{color:"#ff83bd",fontSize:22,marginBottom:9},
   cardTitle:{color:"#fff9f7",fontSize:14,fontWeight:"900"},
   cardDetail:{color:"#d0b9d0",fontSize:11,lineHeight:16,marginTop:5},
