@@ -9,6 +9,8 @@ SOURCES = [
     ("Promptowy — carte interactive GTA 6", "https://promptowy.com/fr/gta-6/carte-interactive/", "website"),
     ("GTA Guide — guides et fiches GTA 6", "https://gtaguide.fr/", "website"),
     ("GTA Guide — Mill Station Radar Base et Hostile Super400", "https://gtaguide.fr/articles/gta-6-hostile-super400-base-radar-mill-station-ou-trouver/", "guide"),
+    ("Promptowy — mission Gone Fishing", "https://promptowy.com/fr/gta-6/gta-6-soluce-gone-fishing/", "guide"),
+    ("Promptowy — mission Gear Up", "https://promptowy.com/fr/gta-6/gta-6-soluce-gear-up/", "guide"),
     ("Promptowy — mission Lab Fees", "https://promptowy.com/fr/gta-6/gta-6-soluce-lab-fees/", "guide"),
     ("Promptowy — mission Just a Scratch", "https://promptowy.com/fr/gta-6/gta-6-soluce-just-a-scratch/", "guide"),
     ("eGamersWorld — guide des régions de Leonida", "https://fr.egamersworld.com/blog/gta-6-map-guide-every-region-of-leonida-and-what-t-DBov8HSbda", "website"),
@@ -42,7 +44,7 @@ ENTRIES = [
         "slug": "hostile-super400",
         "title": "Hostile Super400",
         "summary": "Variante du fusil à pompe Super400, signalée comme butin de l'opération Mill Station Radar Base.",
-        "body": "GTA Guide décrit le Hostile Super400 comme une variante unique du Girardi Super400. La fiche indique un chargeur de 7 cartouches et une arme non personnalisable. L'article de localisation décrit une récupération gratuite dans une mallette située sur une étagère de la salle de stockage de Mill Station Radar Base.\n\nCes caractéristiques sont reprises de la source et restent à vérifier en jeu. Aucun visuel tiers n'est copié dans la base.",
+        "body": "GTA Guide décrit le Hostile Super400 comme une variante unique du Girardi Super400. La fiche indique un fusil à pompe lourd semi-automatique de calibre 12, un chargeur de 7 cartouches, 7,4 en dégâts et 4,3 en précision. La source indique aussi que cette variante n'est pas personnalisable.\n\nL'article de localisation décrit une récupération gratuite dans une mallette située sur une étagère de la salle de stockage de Mill Station Radar Base. Ces caractéristiques sont reprises de la source et restent à vérifier en jeu. Aucun visuel tiers n'est copié dans la base.",
         "category": "weapon",
         "region": "Grassrivers",
         "source_url": "https://gtaguide.fr/armes/hostile-super400/",
@@ -87,6 +89,31 @@ ENTRIES = [
         "status": "unverified",
     },
 
+
+    {
+        "id": "mission-gone-fishing",
+        "slug": "gone-fishing",
+        "title": "Gone Fishing — retrouver Donnie",
+        "summary": "Deuxième mission du chapitre 1 : Cal Hampton accompagne Jason dans les marais de Pelican Valley pour secourir Donnie.",
+        "body": "PRÉREQUIS ET DÉROULEMENT\\nLa source indique que Gone Fishing se débloque après le prologue et constitue la deuxième mission principale du chapitre 1. Cal Hampton confie la mission à Jason.\\n\\nOBJECTIF PRINCIPAL\\n1. Rejoindre Cal Hampton après le prologue.\\n2. Le suivre dans les marais de Pelican Valley.\\n3. Retrouver et secourir Donnie, retenu par les Kingfishers.\\n4. Rejoindre ensuite le ponton où Jason rencontre Brian Heder.\\n\\nSUITE ET RÉCOMPENSES\\nLa mission débloque l'accès à la maison de Jason à Key Lento et le trophée bronze Just Like Paradise. Elle ouvre également plusieurs missions suivantes du chapitre 1, dont Gear Up, Lab Fees, Just a Scratch et Unwanted Attention.\\n\\nSTATUT\\nRésumé reformulé à partir de Promptowy ; à confirmer en jeu.",
+        "category": "mission",
+        "region": "Grassrivers / Leonida Keys",
+        "source_url": "https://promptowy.com/fr/gta-6/gta-6-soluce-gone-fishing/",
+        "source_label": "Promptowy",
+        "status": "unverified",
+    },
+    {
+        "id": "mission-gear-up",
+        "slug": "gear-up",
+        "title": "Gear Up — choisir une arme longue",
+        "summary": "Troisième mission du chapitre 1 : rendez-vous à l'Ammu-Nation de Key Lento après Gone Fishing pour choisir une arme longue.",
+        "body": "PRÉREQUIS\\nTerminer Gone Fishing. La mission se déroule à l'Ammu-Nation de Key Lento, près de la maison de Jason.\\n\\nÉTAPES\\n1. Rejoindre l'armurerie Ammu-Nation à Key Lento en suivant le marqueur.\\n2. Entrer dans la boutique et interagir avec le comptoir.\\n3. Ouvrir le menu d'armement et sélectionner une arme longue parmi les modèles proposés.\\n4. Valider l'achat guidé pour terminer la mission.\\n\\nÀ SAVOIR\\nLa source indique que cette mission sert d'introduction à l'équipement et ne débloque pas de trophée ou succès spécifique.\\n\\nSTATUT\\nRésumé reformulé à partir de Promptowy ; à confirmer en jeu.",
+        "category": "mission",
+        "region": "Leonida Keys",
+        "source_url": "https://promptowy.com/fr/gta-6/gta-6-soluce-gear-up/",
+        "source_label": "Promptowy",
+        "status": "unverified",
+    },
 ]
 
 def seed_reference_data():
