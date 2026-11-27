@@ -161,6 +161,43 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_json(409, {"error": "video_already_added"})
             except (ValueError, TypeError, json.JSONDecodeError):
                 return self.send_json(400, {"error": "invalid_payload"})
+        if path == "/api/robot/analyse-media":
+            if not self.authorized():
+                return self.send_json(401, {"error": "unauthorized"})
+            try:
+                data = self.read_json(max_bytes=30000)
+                video_id = str(data.get("video_id", "")).strip()
+                audio_path = str(data.get("audio_path", "")).strip()
+                frame_paths = data.get("frame_paths", [])
+                if not video_id or not audio_path or not isinstance(frame_paths, list):
+                    return self.send_json(400, {"error": "video_id_audio_path_and_frame_paths_required"})
+                conn = connect()
+                video = conn.execute("SELECT rights_status FROM robot_videos WHERE id=?", (video_id,)).fetchone()
+                conn.close()
+                if not video:
+                    return self.send_json(404, {"error": "video_not_found"})
+                if video["rights_status"] not in ("owned", "licensed", "authorized"):
+                    return self.send_json(409, {"error": "rights_not_cleared"})
+                from .ai import transcribe_audio, analyse_video
+                asr = transcribe_audio(audio_path)
+                tips = analyse_video(asr["text"], frame_paths)
+                conn = connect()
+                conn.execute("UPDATE robot_videos SET transcript=?,status='analysed',updated_at=CURRENT_TIMESTAMP WHERE id=?",
+                             (asr["text"], video_id))
+                created = 0
+                for tip in tips[:20]:
+                    title = str(tip.get("title") or "Astuce à vérifier")[:180]
+                    category = str(tip.get("category") or "astuce")[:40]
+                    body = json.dumps(tip, ensure_ascii=False)
+                    confidence = {"low": 0.25, "medium": 0.55, "high": 0.8}.get(str(tip.get("confidence", "low")).lower(), 0.25)
+                    conn.execute("INSERT INTO robot_tips(id,video_id,title,category,body,status,confidence) VALUES(?,?,?,?,?,'pending',?)",
+                                 (str(uuid.uuid4()), video_id, title, category, body, confidence))
+                    created += 1
+                conn.commit()
+                conn.close()
+                return self.send_json(200, {"ok": True, "transcript_chars": len(asr["text"]), "language": asr.get("language"), "tips_created": created, "status": "pending_review"})
+            except Exception as exc:
+                return self.send_json(502, {"error": "ai_processing_failed", "message": str(exc)[:500]})
         if path == "/api/robot/videos/transcript":
             if not self.authorized():
                 return self.send_json(401, {"error": "unauthorized"})
