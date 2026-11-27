@@ -1,14 +1,19 @@
 {
-  "name": "Leonida — GTA 6 Field Companion",
-  "short_name": "Leonida",
-  "description": "Compagnon indépendant d'exploration GTA 6.",
+  "name": "GTA 6 Guide Radar — Guides & astuces",
+  "short_name": "GTA 6 Radar",
+  "description": "Guide indépendant de GTA VI : carte de Leonida, missions, astuces, armes, véhicules et secrets.",
   "lang": "fr",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#101411",
-  "theme_color": "#101411",
+  "background_color": "#10091c",
+  "theme_color": "#160b25",
   "icons": [
-    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }
