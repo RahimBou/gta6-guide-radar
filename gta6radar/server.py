@@ -134,6 +134,44 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         path = urlparse(self.path).path
+        if path in ("/api/map/markers", "/api/markers"):
+            if not self.authorized():
+                return self.send_json(401, {"error": "unauthorized"})
+            try:
+                data = self.read_json(max_bytes=12000)
+                marker_id = str(data.get("id") or uuid.uuid4()).strip()[:80]
+                title = str(data.get("title") or "").strip()[:160]
+                category = str(data.get("category") or "other").strip()[:40]
+                status = str(data.get("status") or "unverified").strip()[:40]
+                platform = str(data.get("platform") or "both").strip()[:20]
+                region = str(data.get("region") or "").strip()[:100]
+                grid_ref = str(data.get("grid_ref") or "").strip()[:20]
+                description = str(data.get("description") or "").strip()[:3000]
+                source_url = str(data.get("source_url") or "").strip()[:1000]
+                source_label = str(data.get("source_label") or "").strip()[:120]
+                x, y = float(data.get("x")), float(data.get("y"))
+                if not title or not category or not (0 <= x <= 100 and 0 <= y <= 100):
+                    return self.send_json(400, {"error": "title_category_and_valid_coordinates_required"})
+                if source_url and urlparse(source_url).scheme not in ("http", "https"):
+                    return self.send_json(400, {"error": "invalid_source_url"})
+                conn = connect()
+                conn.execute("""
+                    INSERT INTO map_markers
+                    (id,title,description,category,status,platform,region,grid_ref,x,y,source_url,source_label,verified_at)
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ON CONFLICT(id) DO UPDATE SET
+                    title=excluded.title, description=excluded.description,
+                    category=excluded.category, status=excluded.status,
+                    platform=excluded.platform, region=excluded.region,
+                    grid_ref=excluded.grid_ref, x=excluded.x, y=excluded.y,
+                    source_url=excluded.source_url, source_label=excluded.source_label,
+                    verified_at=excluded.verified_at, updated_at=CURRENT_TIMESTAMP
+                """, (marker_id,title,description,category,status,platform,region,grid_ref,x,y,source_url,source_label,data.get("verified_at")))
+                conn.commit()
+                conn.close()
+                return self.send_json(201, {"ok": True, "id": marker_id})
+            except (ValueError, TypeError, sqlite3.Error, json.JSONDecodeError):
+                return self.send_json(400, {"error": "invalid_marker_payload"})
         if path == "/api/robot/discover":
             if not self.authorized():
                 return self.send_json(401, {"error": "unauthorized"})
