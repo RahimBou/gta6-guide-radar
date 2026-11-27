@@ -8,6 +8,9 @@ from .db import connect
 SOURCES = [
     ("Promptowy — carte interactive GTA 6", "https://promptowy.com/fr/gta-6/carte-interactive/", "website"),
     ("GTA Guide — guides et fiches GTA 6", "https://gtaguide.fr/", "website"),
+    ("GTA Guide — Mill Station Radar Base et Hostile Super400", "https://gtaguide.fr/articles/gta-6-hostile-super400-base-radar-mill-station-ou-trouver/", "guide"),
+    ("Promptowy — mission Lab Fees", "https://promptowy.com/fr/gta-6/gta-6-soluce-lab-fees/", "guide"),
+    ("Promptowy — mission Just a Scratch", "https://promptowy.com/fr/gta-6/gta-6-soluce-just-a-scratch/", "guide"),
     ("eGamersWorld — guide des régions de Leonida", "https://fr.egamersworld.com/blog/gta-6-map-guide-every-region-of-leonida-and-what-t-DBov8HSbda", "website"),
     ("IGN Wiki — GTA 6", "https://www.ign.com/wikis/gta-6/", "wiki"),
 ]
