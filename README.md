@@ -1,9 +1,20 @@
-# GTA 6 Guide Radar — Video Intelligence
+# GTA 6 Guide Radar — Guides, astuces et radar IA
 
 Application indépendante consacrée à GTA VI sur PS5 et Xbox Series X|S.
 
-## Nouveau produit
-Le produit est reconstruit autour d'un robot analyste de vidéos de gameplay :
+## Produit public
+Le site public est un portail de guides de jeu : accueil éditorial, bibliothèque filtrable, fiches détaillées, progression locale et portail de carte de Leonida. L'administration du robot est séparée dans `app/admin.html`.
+
+Pages publiques :
+- `/` : accueil du guide joueur ;
+- `/guides.html` : bibliothèque filtrable par catégorie ;
+- `/guide.html?slug=...` : fiche détaillée avec source et progression locale ;
+- `/map.html` : portail de la carte interactive et des six régions.
+
+La carte interactive détaillée est fournie par Promptowy dans une iframe avec un lien de secours vers la source. Les données cartographiques tierces ne sont pas recopiées sans licence et aucune coordonnée n'est inventée.
+
+## Robot IA
+Le robot reste un outil éditorial séparé :
 - collecte des sources accessibles (YouTube, TikTok, Twitch, RSS et import manuel) ;
 - contrôle des droits et des conditions d'accès ;
 - transcription horodatée ;
@@ -17,6 +28,9 @@ Le produit est reconstruit autour d'un robot analyste de vidéos de gameplay :
 python -m gta6radar.server
 ```
 Le serveur utilise le port fourni par Render (`PORT`) ou `GTA6_PORT` en local.
+
+## Bibliothèque de guides
+Les fiches initiales sont des résumés reformulés à partir des sources enregistrées. Elles gardent un statut `unverified` jusqu'à confirmation en jeu. Les nouvelles fiches comprennent notamment Lab Fees, Just a Scratch, Mill Station Radar Base et Hostile Super400.
 
 ## API actuelle
 - `GET /api/health`
