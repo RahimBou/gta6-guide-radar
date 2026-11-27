@@ -37,7 +37,7 @@ Connecteurs à configurer ensuite :
 - YouTube Data API : `YOUTUBE_API_KEY`
 - Twitch Helix : `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`
 - TikTok Display : `TIKTOK_CLIENT_KEY`, `TIKTOK_CLIENT_SECRET` et autorisation OAuth des créateurs
-- ASR et vision : fournisseur et clés séparés
+- ASR et vision OpenAI : `OPENAI_API_KEY` (secret Render), `GTA6_ASR_MODEL` et `GTA6_VISION_MODEL` facultatifs\n- Médias autorisés : placer les fichiers audio et images dans `GTA6_MEDIA_DIR` (par défaut `/var/data/gta6-media`), puis appeler `POST /api/robot/analyse-media` avec `video_id`, `audio_path` et `frame_paths`\n- Le endpoint analyse uniquement des fichiers locaux sous `GTA6_MEDIA_DIR` ; aucun téléchargement d'URL arbitraire n'est effectué
 - Stockage objet privé pour les fichiers autorisés
 
 ## Plateformes et droits
