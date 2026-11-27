@@ -15,6 +15,7 @@ const regions = [
 
 const sections = [
   { title:"Missions",detail:"Guides et étapes documentés.",href:"/missions",symbol:"◈" },
+  { title:"Fiches & lieux",detail:"Régions, bases radar et armes.",href:"/guides",symbol:"⌖" },
   { title:"Astuces & découvertes",detail:"Conseils et découvertes.",href:"/discoveries",symbol:"✳" },
   { title:"Véhicules",detail:"Catalogue des véhicules.",href:"/vehicles",symbol:"▰" },
   { title:"Secrets & collections",detail:"Objets et éléments à trouver.",href:"/secrets",symbol:"⌁" },
