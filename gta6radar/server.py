@@ -161,6 +161,40 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_json(409, {"error": "video_already_added"})
             except (ValueError, TypeError, json.JSONDecodeError):
                 return self.send_json(400, {"error": "invalid_payload"})
+        if path == "/api/robot/videos/transcript":
+            if not self.authorized():
+                return self.send_json(401, {"error": "unauthorized"})
+            try:
+                data = self.read_json(max_bytes=500000)
+                video_id = str(data.get("video_id", "")).strip()
+                transcript = str(data.get("transcript", "")).strip()
+                rights_status = str(data.get("rights_status", "")).strip()
+                if not video_id or len(transcript) < 80 or rights_status not in {"owned", "licensed", "authorized", "public_text"}:
+                    return self.send_json(400, {"error": "video_id_transcript_and_cleared_rights_required"})
+                conn = connect()
+                cur = conn.execute("""
+                    UPDATE robot_videos
+                    SET transcript=?, rights_status=?, status='transcript_ready', updated_at=CURRENT_TIMESTAMP
+                    WHERE id=?
+                """, (transcript, rights_status, video_id))
+                conn.commit()
+                conn.close()
+                return self.send_json(200 if cur.rowcount else 404, {"ok": bool(cur.rowcount), "status": "transcript_ready"})
+            except (ValueError, TypeError, json.JSONDecodeError):
+                return self.send_json(400, {"error": "invalid_payload"})
+        if path == "/api/robot/process":
+            if not self.authorized():
+                return self.send_json(401, {"error": "unauthorized"})
+            try:
+                data = self.read_json()
+                video_id = str(data.get("video_id", "")).strip()
+                if not video_id:
+                    return self.send_json(400, {"error": "video_id_required"})
+                from .pipeline import process_video
+                result = process_video(video_id)
+                return self.send_json(200 if result.get("ok") else 409, result)
+            except Exception as exc:
+                return self.send_json(500, {"error": "processing_failed", "message": str(exc)[:240]})
         if path == "/api/robot/tips/review":
             if not self.authorized():
                 return self.send_json(401, {"error": "unauthorized"})
