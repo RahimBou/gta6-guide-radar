@@ -25,10 +25,10 @@ Le serveur utilise le port fourni par Render (`PORT`) ou `GTA6_PORT` en local.
 - `GET /api/robot/tips`
 - `POST /api/robot/videos` : enregistre une URL YouTube/TikTok/Twitch et crée une tâche de contrôle des droits.
 - `POST /api/robot/discover` : lance la découverte RSS, YouTube et Twitch (jeton administrateur requis). Un appel GET renvoie désormais 405 sans déclencher de collecte.
-- `POST /api/robot/tips/review` : validation éditoriale avec jeton administrateur.
+- `POST /api/robot/videos/transcript` : enregistre une transcription obtenue légalement, avec déclaration du statut de droits (jeton administrateur requis).\n- `POST /api/robot/process` : transforme une transcription autorisée en fiches candidates avec extraits de preuve (jeton administrateur requis).\n- `POST /api/robot/tips/review` : validation éditoriale avec jeton administrateur.
 
 ## État réel
-La console web et l'enregistrement des URL sont implémentés. Les connecteurs automatiques, la transcription ASR, l'extraction d'images et l'analyse IA ne sont pas encore actifs : ils nécessitent les identifiants de plateforme, des droits d'accès au média et un fournisseur d'analyse configuré. Une URL seule n'autorise pas le téléchargement d'une vidéo.
+La console web, la découverte de métadonnées RSS/YouTube/Twitch, l'enregistrement des URL et un premier moteur local d'extraction de fiches depuis une transcription sont implémentés. Le moteur local extrait des phrases candidates et les place en attente de validation. La transcription ASR automatique, l'extraction d'images et l'analyse visuelle IA ne sont pas encore actives ; elles nécessitent un fournisseur et des accès configurés. Une URL seule n'autorise pas le téléchargement d'une vidéo.
 
 ## Configuration
 Définir `GTA6_ADMIN_TOKEN` dans les variables d'environnement pour les actions d'administration. Définir `GTA6_DATA_DIR` ou `GTA6_DB_PATH` uniquement après avoir configuré un stockage persistant. Ne jamais enregistrer de secret dans Git.
