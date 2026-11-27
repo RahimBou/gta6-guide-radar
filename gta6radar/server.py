@@ -10,6 +10,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 from .db import connect
 from .discovery import discover_all
+from .seed import seed_reference_data
 
 ROOT = Path(__file__).resolve().parent.parent / "app"
 PLATFORM_HOSTS = {
@@ -73,7 +74,7 @@ class Handler(SimpleHTTPRequestHandler):
             conn = connect()
             if category:
                 rows = conn.execute("""
-                    SELECT id,slug,title,summary,body,category,platform,status,region,grid_ref
+                    SELECT id,slug,title,summary,body,category,platform,status,region,grid_ref,source_url,source_label,media_url
                     FROM guide_entries WHERE category=? ORDER BY title COLLATE NOCASE
                 """, (category,)).fetchall()
             else:
@@ -81,6 +82,14 @@ class Handler(SimpleHTTPRequestHandler):
                     SELECT id,slug,title,summary,body,category,platform,status,region,grid_ref
                     FROM guide_entries ORDER BY title COLLATE NOCASE
                 """).fetchall()
+            conn.close()
+            return self.send_json(200, {"items": [dict(row) for row in rows]})
+        if path == "/api/guide/sources":
+            conn = connect()
+            rows = conn.execute("""
+                SELECT id,name,url,kind,enabled,created_at
+                FROM sources ORDER BY name COLLATE NOCASE
+            """).fetchall()
             conn.close()
             return self.send_json(200, {"items": [dict(row) for row in rows]})
         if path == "/api/robot/overview":
@@ -257,6 +266,8 @@ def main():
     host = os.environ.get("GTA6_HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", os.environ.get("GTA6_PORT", "8080")))
     connect().close()
+    seed_result = seed_reference_data()
+    print(f"Données de référence chargées : {seed_result}")
     print(f"GTA 6 Guide Radar disponible sur http://{host}:{port}")
     ThreadingHTTPServer((host, port), Handler).serve_forever()
 
