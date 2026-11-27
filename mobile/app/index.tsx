@@ -27,6 +27,8 @@ export default function HomeScreen() {
   const [zoom,setZoom] = useState(1);
   const [offset,setOffset] = useState({x:0,y:0});
   const gesture = useRef({x:0,y:0,baseDistance:0,baseZoom:1});
+  const currentView = useRef({x:0,y:0,zoom:1});
+  currentView.current = {x:offset.x,y:offset.y,zoom};
   const region = regions.find(r=>r.id===selected) || regions[0];
   const mapWidth = Math.min(width-32,620);
   const mapHeight = mapWidth/(731/1000);
@@ -36,14 +38,14 @@ export default function HomeScreen() {
     onMoveShouldSetPanResponder: () => true,
     onPanResponderGrant: (evt) => {
       const t = evt.nativeEvent.touches;
-      gesture.current = {x:offset.x,y:offset.y,baseDistance:t.length>1?Math.hypot(t[0].pageX-t[1].pageX,t[0].pageY-t[1].pageY):0,baseZoom:zoom};
+      gesture.current = {x:currentView.current.x,y:currentView.current.y,baseDistance:t.length>1?Math.hypot(t[0].pageX-t[1].pageX,t[0].pageY-t[1].pageY):0,baseZoom:currentView.current.zoom};
     },
     onPanResponderMove: (evt,gs) => {
       const t = evt.nativeEvent.touches;
       if (t.length>1) {
         const d = Math.hypot(t[0].pageX-t[1].pageX,t[0].pageY-t[1].pageY);
         if (gesture.current.baseDistance>0) setZoom(clampZoom(gesture.current.baseZoom*d/gesture.current.baseDistance));
-      } else if (zoom>1) {
+      } else if (currentView.current.zoom>1) {
         setOffset({x:gesture.current.x+gs.dx,y:gesture.current.y+gs.dy});
       }
     },
