@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Linking, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const API = "https://gta6-guide-radar.onrender.com";
@@ -13,6 +13,10 @@ const filters = [
   { id: "region", label: "Régions" },
   { id: "base_radar", label: "Bases radar" },
   { id: "weapon", label: "Armes" },
+  { id: "mission", label: "Missions" },
+  { id: "vehicle", label: "Véhicules" },
+  { id: "collectible", label: "Secrets" },
+  { id: "tip", label: "Astuces" },
 ];
 
 export default function GuidesScreen() {
@@ -20,6 +24,7 @@ export default function GuidesScreen() {
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -34,7 +39,7 @@ export default function GuidesScreen() {
     return () => { active = false; };
   }, []);
 
-  const visible = useMemo(() => filter === "all" ? items : items.filter(item => item.category === filter), [items, filter]);
+  const visible = useMemo(() => items.filter(item => (filter === "all" || item.category === filter) && (item.title + " " + item.summary + " " + (item.region || "")).toLowerCase().includes(query.toLowerCase().trim())), [items, filter, query]);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -42,6 +47,7 @@ export default function GuidesScreen() {
         <Text style={styles.kicker}>BASE DOCUMENTAIRE · LEONIDA</Text>
         <Text style={styles.title}>Fiches & lieux</Text>
         <Text style={styles.intro}>Régions, bases radar et équipements recensés à partir de guides publics. Chaque fiche conserve sa source et son statut.</Text>
+        <TextInput value={query} onChangeText={setQuery} placeholder="Rechercher une mission, un lieu, une arme…" placeholderTextColor="#9e809b" style={styles.search} />
         <View style={styles.filters}>
           {filters.map(item => (
             <Pressable key={item.id} onPress={() => setFilter(item.id)} style={[styles.filter, filter === item.id && styles.filterActive]}>
@@ -52,6 +58,7 @@ export default function GuidesScreen() {
         {loading ? <ActivityIndicator color="#ff83bd" size="large" style={{marginTop:30}} /> : null}
         {error ? <View style={styles.notice}><Text style={styles.noticeText}>{error}</Text><Pressable onPress={() => {setLoading(true);setError("");fetch(API + "/api/guide/entries").then(r=>r.json()).then(d=>setItems(d.items||[])).catch(e=>setError(e.message)).finally(()=>setLoading(false));}}><Text style={styles.retry}>RÉESSAYER</Text></Pressable></View> : null}
         {!loading && !error && visible.length === 0 ? <Text style={styles.empty}>Aucune fiche dans cette catégorie pour le moment.</Text> : null}
+        {!loading && !error ? <Text style={styles.count}>{visible.length} fiche(s) affichée(s)</Text> : null}
         {visible.map(item => (
           <View key={item.id} style={styles.card}>
             <View style={styles.metaRow}>
@@ -77,6 +84,8 @@ const styles = StyleSheet.create({
   kicker:{color:"#f58bc5",fontSize:9,fontWeight:"900",letterSpacing:2,marginTop:8},
   title:{color:"#fff9f7",fontSize:30,fontWeight:"900",marginTop:7},
   intro:{color:"#d0b9d0",fontSize:13,lineHeight:19,marginTop:7},
+  search:{backgroundColor:"#1c1227",borderWidth:1,borderColor:"#55345f",borderRadius:10,color:"#fff9f7",padding:12,fontSize:12,marginTop:15},
+  count:{color:"#ff9acb",fontSize:10,fontWeight:"900",marginBottom:10},
   filters:{flexDirection:"row",flexWrap:"wrap",gap:7,marginVertical:16},
   filter:{borderWidth:1,borderColor:"#55345f",borderRadius:20,paddingVertical:8,paddingHorizontal:12,backgroundColor:"#1c1227"},
   filterActive:{backgroundColor:"#542344",borderColor:"#f58bc5"},
