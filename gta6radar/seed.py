@@ -30,7 +30,7 @@ ENTRIES = [
         "slug": "mill-station-radar-base",
         "title": "Mill Station Radar Base",
         "summary": "Base radar au nord de Watson Bay ; le guide GTA Guide y situe une opération illégale avec une arme et un coffre.",
-        "body": "Procédure rapportée par GTA Guide : accéder au toit, entrer par la trappe ouverte et descendre dans la salle de stockage. Une mallette contenant le fusil à pompe Hostile Super400 serait posée sur une étagère. Les doubles portes conduisent au bureau voisin ; le coffre serait à droite en sortant de la salle de stockage.\n\nLa page source situe le bâtiment au nord de Watson Bay, dans la zone des Grassrivers. Aucune coordonnée précise n'a été extraite : le repère cartographique reste à créer après vérification.\n\nStatut : information rapportée par une source tierce, non confirmée indépendamment en jeu.",
+        "body": "EMPLACEMENT RAPPORTÉ\nGTA Guide situe le bâtiment au nord de Watson Bay, dans le secteur des Grassrivers. La position exacte n'est pas fournie ici : consulte la carte externe pour chercher le secteur, sans considérer un point approximatif comme une coordonnée vérifiée.\n\nACCÈS ET BUTIN\n1. Rejoindre le bâtiment de la base radar.\n2. Monter sur le toit et utiliser la trappe ouverte.\n3. Descendre dans la salle de stockage et ouvrir la mallette posée sur une étagère pour récupérer le Hostile Super400.\n4. Passer par les doubles portes vers le bureau voisin.\n5. En sortant de la salle de stockage, prendre à droite pour trouver le coffre et récupérer l'argent.\n\nLa source indique que cette opération n'est liée à aucun chapitre. Aucun repère GPS n'est publié dans cette fiche tant que les coordonnées ne sont pas confirmées.",
         "category": "base_radar",
         "region": "Grassrivers",
         "source_url": "https://gtaguide.fr/articles/gta-6-hostile-super400-base-radar-mill-station-ou-trouver/",
@@ -86,18 +86,7 @@ ENTRIES = [
         "source_label": "Promptowy",
         "status": "unverified",
     },
-    {
-        "id": "location-mill-station",
-        "slug": "mill-station-radar-base",
-        "title": "Mill Station Radar Base — arme et coffre",
-        "summary": "Opération illégale au nord de Watson Bay : la source décrit une entrée par le toit, un Hostile Super400 et un coffre dans le bureau voisin.",
-        "body": "EMPLACEMENT RAPPORTÉ\nGTA Guide situe le bâtiment au nord de Watson Bay, dans le secteur des Grassrivers. La position exacte n'est pas fournie ici : consulte la carte externe pour chercher le secteur, sans considérer un point approximatif comme une coordonnée vérifiée.\n\nACCÈS ET BUTIN\n1. Rejoindre le bâtiment de la base radar.\n2. Monter sur le toit et utiliser la trappe ouverte.\n3. Descendre dans la salle de stockage et ouvrir la mallette posée sur une étagère pour récupérer le Hostile Super400.\n4. Passer par les doubles portes vers le bureau voisin.\n5. En sortant de la salle de stockage, prendre à droite pour trouver le coffre et récupérer l'argent.\n\nLa source indique que cette opération n'est liée à aucun chapitre. Aucun repère GPS n'est publié dans cette fiche tant que les coordonnées ne sont pas confirmées.",
-        "category": "base_radar",
-        "region": "Grassrivers",
-        "source_url": "https://gtaguide.fr/articles/gta-6-hostile-super400-base-radar-mill-station-ou-trouver/",
-        "source_label": "GTA Guide",
-        "status": "unverified",
-    },
+
 ]
 
 def seed_reference_data():
@@ -130,6 +119,14 @@ def seed_reference_data():
                 VALUES(?,?,?,?,?,?, 'both',?,?,?,?)""",
                 (item["id"], item["slug"], item["title"], item["summary"], item["body"],
                  item["category"], item["status"], item["region"], item["source_url"], item["source_label"]),
+            )
+            conn.execute(
+                """UPDATE guide_entries
+                   SET title=?, summary=?, body=?, category=?, status=?, region=?,
+                       source_url=?, source_label=?, updated_at=CURRENT_TIMESTAMP
+                   WHERE id=?""",
+                (item["title"], item["summary"], item["body"], item["category"],
+                 item["status"], item["region"], item["source_url"], item["source_label"], item["id"]),
             )
 
         conn.commit()
