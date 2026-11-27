@@ -9,7 +9,7 @@ const config: Record<string,{title:string;intro:string;endpoint:string;empty:str
   discoveries:{title:"Astuces & découvertes",intro:"Fiches proposées par le robot à partir des sources ajoutées.",endpoint:"/api/robot/tips",empty:"Aucune fiche disponible. Ajoutez des sources vidéo dans Robot Radar."},
   vehicles:{title:"Véhicules",intro:"Fiches véhicules issues de la base documentaire.",endpoint:"/api/guide/entries?category=vehicle",empty:"Aucune fiche véhicule documentée pour le moment."},
   missions:{title:"Missions & activités",intro:"Guides et étapes documentés.",endpoint:"/api/guide/entries?category=mission",empty:"Aucune mission documentée pour le moment."},
-  secrets:{title:"Secrets & collections",intro:"Secrets, objets et collections enregistrés.",endpoint:"/api/guide/entries?category=secret",empty:"Aucun secret documenté pour le moment."},
+  secrets:{title:"Secrets & collections",intro:"Secrets, objets et collections enregistrés.",endpoint:"/api/guide/entries?category=collectible",empty:"Aucun secret documenté pour le moment."},
   progress:{title:"Ma progression",intro:"Votre suivi local des modules et des découvertes.",endpoint:"/api/guide/entries",empty:"La progression sera alimentée à mesure que vous marquerez des fiches comme terminées."},
   robot:{title:"Robot Radar",intro:"Ajoutez une vidéo publique : le robot crée une tâche de contrôle et de traitement.",endpoint:"/api/robot/videos",empty:"Aucune source vidéo enregistrée."},
   sources:{title:"Sources & actualités",intro:"Liens et métadonnées issus des flux publics GTA VI. Chaque élément reste non vérifié jusqu’à contrôle.",endpoint:"/api/robot/items",empty:"Aucune actualité collectée. Le robot doit effectuer une recherche depuis le serveur."},
@@ -60,6 +60,8 @@ export default function SectionScreen() {
         <Text style={styles.kicker}>GTA 6 GUIDE RADAR</Text>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.intro}>{item.intro}</Text>
+
+        {key === "map" ? <Pressable onPress={()=>Linking.openURL("https://promptowy.com/fr/gta-6/carte-interactive/")} style={styles.button}><Text style={styles.buttonText}>OUVRIR LA CARTE INTERACTIVE COMPLÈTE ↗</Text></Pressable> : null}
 
         {key === "robot" ? <View style={styles.form}>
           <Text style={styles.formTitle}>AJOUTER UNE SOURCE VIDÉO</Text>
