@@ -79,7 +79,7 @@ class Handler(SimpleHTTPRequestHandler):
                 """, (category,)).fetchall()
             else:
                 rows = conn.execute("""
-                    SELECT id,slug,title,summary,body,category,platform,status,region,grid_ref
+                    SELECT id,slug,title,summary,body,category,platform,status,region,grid_ref,source_url,source_label,media_url
                     FROM guide_entries ORDER BY title COLLATE NOCASE
                 """).fetchall()
             conn.close()
